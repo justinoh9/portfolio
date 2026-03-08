@@ -143,7 +143,7 @@ const siteContent = {
         label: "LinkedIn",
         value: "linkedin.com/in/justin-k-oh",
         action: "Visit",
-        url: "https://linkedin.com/in/justin-k-oh"
+        url: "https://www.linkedin.com/in/justin-k-oh/"
       }
     ],
     availability: {
