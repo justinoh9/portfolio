@@ -9,3 +9,8 @@ Computer Engineering, B.S | New York University
 ### Work Experience
 
 
+currently how to get to the website 
+
+https://justinoh9.github.io/portfolio/
+
+
