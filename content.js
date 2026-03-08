@@ -129,9 +129,9 @@ const siteContent = {
     items: [
       {
         label: "Email",
-        value: "your-email@example.com",
+        value: "justinoh@nyu.edu",
         action: "Open",
-        url: "mailto:your-email@example.com"
+        url: "mailto:justinoh@nyu.edu"
       },
       {
         label: "GitHub",
@@ -141,9 +141,9 @@ const siteContent = {
       },
       {
         label: "LinkedIn",
-        value: "linkedin.com/in/yourprofile",
+        value: "linkedin.com/in/justin-k-oh",
         action: "Visit",
-        url: "https://linkedin.com/in/yourprofile"
+        url: "www.linkedin.com/in/justin-k-oh"
       }
     ],
     availability: {
