@@ -93,8 +93,9 @@
     }
 
     .nav-links a:hover,
-    .socials a:hover,
-    .footer-links a:hover {
+    .footer-links a:hover,
+    .project-links a:hover,
+    .contact-item a:hover {
       color: var(--text);
     }
 
@@ -181,6 +182,7 @@
       border: 1px solid rgba(255,255,255,0.1);
       font-weight: 600;
       transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      cursor: pointer;
     }
 
     .btn:hover { transform: translateY(-2px); }
@@ -244,11 +246,16 @@
       padding: 1.4rem;
     }
 
+    .portrait.has-image {
+      background-size: cover;
+      background-position: center;
+    }
+
     .portrait-card {
-      max-width: 240px;
+      max-width: 260px;
       padding: 1rem;
       border-radius: 20px;
-      background: rgba(10,13,20,0.7);
+      background: rgba(10,13,20,0.72);
       border: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -310,7 +317,8 @@
     .timeline-item p,
     .project-card p,
     .contact-copy,
-    .skill-chip span:last-child {
+    .skill-chip span:last-child,
+    .mini-card p {
       color: var(--muted);
     }
 
@@ -363,6 +371,8 @@
       border: 1px solid rgba(255,255,255,0.08);
       overflow: hidden;
       position: relative;
+      background-size: cover;
+      background-position: center;
     }
 
     .project-thumb::after {
@@ -375,6 +385,10 @@
       box-shadow:
         0 -56px 0 rgba(255,255,255,0.06),
         0 -112px 0 rgba(255,255,255,0.04);
+    }
+
+    .project-thumb.has-image::after {
+      display: none;
     }
 
     .tag-row {
@@ -397,6 +411,7 @@
       gap: 0.75rem;
       margin-top: auto;
       padding-top: 0.3rem;
+      flex-wrap: wrap;
     }
 
     .project-links a {
@@ -459,6 +474,7 @@
       border-radius: 18px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
+      align-items: center;
     }
 
     .contact-label {
@@ -566,8 +582,8 @@
     <div class="container">
       <nav>
         <a href="#top" class="brand">
-          <span class="brand-mark">JO</span>
-          <span>Justin Oh</span>
+          <span class="brand-mark" id="brandMark">JO</span>
+          <span id="brandName">Justin Oh</span>
         </a>
         <div class="nav-links">
           <a href="#about">About</a>
@@ -584,55 +600,25 @@
       <div class="container hero-grid">
         <div class="glass hero-copy reveal">
           <div>
-            <div class="eyebrow">Computer Engineering Student • Builder • Problem Solver</div>
-            <h1>Designing systems with ambition and clarity.</h1>
-            <p class="subhead">
-              I’m Justin Oh, a computer engineering student at NYU building software, embedded systems,
-              and practical tools that turn ideas into real, usable products. I care about clean engineering,
-              thoughtful design, and projects that feel sharp both technically and visually.
-            </p>
+            <div class="eyebrow" id="eyebrowText"></div>
+            <h1 id="heroTitle"></h1>
+            <p class="subhead" id="heroSubtitle"></p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="#projects">View Projects</a>
-              <a class="btn btn-secondary" href="#contact">Get In Touch</a>
+              <a class="btn btn-primary" id="primaryCta" href="#projects">View Projects</a>
+              <a class="btn btn-secondary" id="secondaryCta" href="#contact">Get In Touch</a>
             </div>
-            <div class="hero-meta">
-              <div class="meta-card">
-                <div class="meta-label">Focus</div>
-                <div class="meta-value">Software • Embedded • Systems</div>
-              </div>
-              <div class="meta-card">
-                <div class="meta-label">Based In</div>
-                <div class="meta-value">New York</div>
-              </div>
-              <div class="meta-card">
-                <div class="meta-label">Seeking</div>
-                <div class="meta-value">Internships & projects</div>
-              </div>
-            </div>
+            <div class="hero-meta" id="heroMeta"></div>
           </div>
         </div>
 
         <div class="glass hero-side reveal">
-          <div class="portrait">
+          <div class="portrait" id="portraitBlock">
             <div class="portrait-card">
-              <div class="meta-label">Current Direction</div>
-              <div class="meta-value" style="margin-top:.45rem; font-size:1.05rem;">
-                Building stronger software, sharper projects, and a portfolio that feels deliberate.
-              </div>
+              <div class="meta-label" id="portraitLabel"></div>
+              <div class="meta-value" id="portraitText" style="margin-top:.45rem; font-size:1.05rem;"></div>
             </div>
           </div>
-          <div class="mini-grid">
-            <div class="mini-card">
-              <div class="meta-label">Recent Work</div>
-              <h3>Amazon Review Analyzer</h3>
-              <div style="color: var(--muted);">Python scraper + NLP workflow for e-commerce insight.</div>
-            </div>
-            <div class="mini-card">
-              <div class="meta-label">Interests</div>
-              <h3>Vision • Hardware • Product</h3>
-              <div style="color: var(--muted);">I like projects that combine engineering depth with polish.</div>
-            </div>
-          </div>
+          <div class="mini-grid" id="miniCards"></div>
         </div>
       </div>
     </section>
@@ -640,37 +626,17 @@
     <section id="about" class="section">
       <div class="container">
         <div class="section-head reveal">
-          <div>
-            <h2>About</h2>
-          </div>
-          <p>
-            The goal here is the same feeling as the site you shared: minimal, premium, and intentional,
-            but adapted to your own story and work.
-          </p>
+          <div><h2>About</h2></div>
+          <p id="aboutSectionNote"></p>
         </div>
         <div class="about-grid">
           <div class="glass about-card reveal">
-            <h3>Who I Am</h3>
-            <p>
-              I’m a computer engineering student who enjoys building across software and hardware.
-              My work spans Python, C++, SQL, digital systems, and project-driven problem solving.
-              I’m especially interested in roles where I can grow as an engineer while shipping things that matter.
-            </p>
-            <p>
-              I like websites that feel calm, confident, and selective. Instead of trying to show everything,
-              this layout helps you present only your strongest projects and gives them room to breathe.
-            </p>
+            <h3 id="aboutTitle"></h3>
+            <div id="aboutBody"></div>
           </div>
           <div class="glass skills-card reveal">
-            <h3>Core Stack</h3>
-            <div class="skills-list">
-              <div class="skill-chip"><span>Python</span><span>Automation, scraping, AI workflows</span></div>
-              <div class="skill-chip"><span>C++</span><span>Systems and OOP projects</span></div>
-              <div class="skill-chip"><span>SQL</span><span>Databases and querying</span></div>
-              <div class="skill-chip"><span>Verilog</span><span>Digital logic and hardware design</span></div>
-              <div class="skill-chip"><span>HTML/CSS/JS</span><span>Portfolio and frontend foundations</span></div>
-              <div class="skill-chip"><span>GitHub</span><span>Version control and deployment</span></div>
-            </div>
+            <h3 id="skillsTitle"></h3>
+            <div class="skills-list" id="skillsList"></div>
           </div>
         </div>
       </div>
@@ -679,168 +645,42 @@
     <section id="projects" class="section">
       <div class="container">
         <div class="section-head reveal">
-          <div>
-            <h2>Selected Projects</h2>
-          </div>
-          <p>
-            Keep this section tight. Three to six strong projects is better than a crowded wall of everything you’ve touched.
-          </p>
+          <div><h2>Selected Projects</h2></div>
+          <p id="projectsSectionNote"></p>
         </div>
-
-        <div class="projects-grid">
-          <article class="project-card reveal">
-            <div class="project-thumb"></div>
-            <div class="tag-row">
-              <span class="tag">Python</span>
-              <span class="tag">NLP</span>
-              <span class="tag">Scraping</span>
-            </div>
-            <h3>Amazon Review Analyzer</h3>
-            <p>
-              A Python-based pipeline that collects large review datasets and analyzes sentiment for e-commerce insights.
-              Built to show data handling, automation, and practical ML-adjacent thinking.
-            </p>
-            <div class="project-links">
-              <a href="#">Live</a>
-              <a href="#">Code</a>
-            </div>
-          </article>
-
-          <article class="project-card reveal">
-            <div class="project-thumb"></div>
-            <div class="tag-row">
-              <span class="tag">C++</span>
-              <span class="tag">Architecture</span>
-              <span class="tag">Simulation</span>
-            </div>
-            <h3>E20 / E15 Simulator</h3>
-            <p>
-              A systems-focused C++ project modeling low-level computer architecture concepts through custom classes,
-              instruction behavior, and memory interactions.
-            </p>
-            <div class="project-links">
-              <a href="#">Case Study</a>
-              <a href="#">Code</a>
-            </div>
-          </article>
-
-          <article class="project-card reveal">
-            <div class="project-thumb"></div>
-            <div class="tag-row">
-              <span class="tag">Embedded</span>
-              <span class="tag">PWM</span>
-              <span class="tag">Verilog</span>
-            </div>
-            <h3>Embedded & Digital Design Work</h3>
-            <p>
-              Lab and project work involving timing, PWM, logic design, and hardware reasoning.
-              This section can become a single featured case study with visuals from your boards, code, and diagrams.
-            </p>
-            <div class="project-links">
-              <a href="#">Overview</a>
-              <a href="#">Details</a>
-            </div>
-          </article>
-        </div>
+        <div class="projects-grid" id="projectsGrid"></div>
       </div>
     </section>
 
     <section id="experience" class="section">
       <div class="container">
         <div class="section-head reveal">
-          <div>
-            <h2>Experience & Growth</h2>
-          </div>
-          <p>
-            You don’t need a huge resume here. A clean timeline with coursework, projects, and relevant milestones already works well.
-          </p>
+          <div><h2>Experience & Growth</h2></div>
+          <p id="timelineSectionNote"></p>
         </div>
-
-        <div class="glass timeline reveal">
-          <div class="timeline-item">
-            <div class="timeline-date">2025 — Present</div>
-            <div>
-              <h3>NYU Tandon • Computer Engineering</h3>
-              <p>
-                Building depth across software, hardware, databases, digital logic, and engineering problem solving.
-              </p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-date">2025</div>
-            <div>
-              <h3>Independent Project Development</h3>
-              <p>
-                Focused on portfolio-quality work in scraping, analysis, systems programming, and personal tools.
-              </p>
-            </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-date">Next</div>
-            <div>
-              <h3>Software / Computer Engineering Internship</h3>
-              <p>
-                Seeking opportunities to contribute, learn fast, and turn strong academic momentum into real-world engineering value.
-              </p>
-            </div>
-          </div>
-        </div>
+        <div class="glass timeline reveal" id="timelineList"></div>
       </div>
     </section>
 
     <section id="contact" class="section">
       <div class="container">
         <div class="section-head reveal">
-          <div>
-            <h2>Contact</h2>
-          </div>
-          <p>
-            Make it easy for recruiters, classmates, collaborators, or founders to reach you in one step.
-          </p>
+          <div><h2>Contact</h2></div>
+          <p id="contactSectionNote"></p>
         </div>
-
         <div class="contact-grid">
           <div class="contact-card reveal">
-            <h3>Let’s build something useful.</h3>
-            <p class="contact-copy">
-              Replace the placeholder links below with your real email, GitHub, LinkedIn, and resume.
-              You can also add a calendly link later if you want this to feel more polished.
-            </p>
-            <div class="contact-list">
-              <div class="contact-item">
-                <div>
-                  <div class="contact-label">Email</div>
-                  <div>justin@example.com</div>
-                </div>
-                <a href="mailto:justin@example.com">Open</a>
-              </div>
-              <div class="contact-item">
-                <div>
-                  <div class="contact-label">GitHub</div>
-                  <div>github.com/yourusername</div>
-                </div>
-                <a href="#">Visit</a>
-              </div>
-              <div class="contact-item">
-                <div>
-                  <div class="contact-label">LinkedIn</div>
-                  <div>linkedin.com/in/yourprofile</div>
-                </div>
-                <a href="#">Visit</a>
-              </div>
-            </div>
+            <h3 id="contactTitle"></h3>
+            <p class="contact-copy" id="contactCopy"></p>
+            <div class="contact-list" id="contactList"></div>
           </div>
-
           <div class="contact-card reveal">
             <div class="availability">
               <div>
-                <div class="eyebrow" style="margin:0 auto;">Available for conversation</div>
-                <strong>Open to internships, projects, and good opportunities.</strong>
-                <p class="contact-copy" style="max-width: 42ch; margin: 0 auto 1.4rem;">
-                  This right-hand panel is a good place for a clean statement of intent,
-                  a resume button, or a short quote that gives the page personality without clutter.
-                </p>
-                <a class="btn btn-primary" href="#">Download Resume</a>
+                <div class="eyebrow" id="availabilityEyebrow" style="margin:0 auto;"></div>
+                <strong id="availabilityHeadline"></strong>
+                <p class="contact-copy" id="availabilityCopy" style="max-width: 42ch; margin: 0 auto 1.4rem;"></p>
+                <a class="btn btn-primary" id="resumeButton" href="#" target="_blank" rel="noreferrer">Download Resume</a>
               </div>
             </div>
           </div>
@@ -851,7 +691,7 @@
 
   <footer>
     <div class="container footer-inner">
-      <div>© <span id="year"></span> Justin Oh. Built for GitHub Pages.</div>
+      <div>© <span id="year"></span> <span id="footerName"></span>. Built for GitHub Pages.</div>
       <div class="footer-links">
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
@@ -860,20 +700,157 @@
     </div>
   </footer>
 
+  <script src="content.js"></script>
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const byId = (id) => document.getElementById(id);
 
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
+    function initialsFromName(name) {
+      return name
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0].toUpperCase())
+        .join('');
+    }
 
-    reveals.forEach((el) => observer.observe(el));
+    function renderHeroMeta(items) {
+      byId('heroMeta').innerHTML = items.map(item => `
+        <div class="meta-card">
+          <div class="meta-label">${item.label}</div>
+          <div class="meta-value">${item.value}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderMiniCards(items) {
+      byId('miniCards').innerHTML = items.map(item => `
+        <div class="mini-card">
+          <div class="meta-label">${item.label}</div>
+          <h3>${item.title}</h3>
+          <p>${item.text}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderAboutParagraphs(paragraphs) {
+      byId('aboutBody').innerHTML = paragraphs.map(text => `<p>${text}</p>`).join('');
+    }
+
+    function renderSkills(skills) {
+      byId('skillsList').innerHTML = skills.map(skill => `
+        <div class="skill-chip">
+          <span>${skill.name}</span>
+          <span>${skill.detail}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderProjects(projects) {
+      byId('projectsGrid').innerHTML = projects.map(project => {
+        const thumbStyle = project.image ? `style="background-image:url('${project.image}')"` : '';
+        const thumbClass = project.image ? 'project-thumb has-image' : 'project-thumb';
+        const tags = (project.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
+        const links = (project.links || []).map(link => `<a href="${link.url}" ${link.url.startsWith('#') ? '' : 'target="_blank" rel="noreferrer"'}>${link.label}</a>`).join('');
+        return `
+          <article class="project-card reveal">
+            <div class="${thumbClass}" ${thumbStyle}></div>
+            <div class="tag-row">${tags}</div>
+            <h3>${project.title}</h3>
+            <p>${project.description}</p>
+            <div class="project-links">${links}</div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderTimeline(items) {
+      byId('timelineList').innerHTML = items.map(item => `
+        <div class="timeline-item">
+          <div class="timeline-date">${item.date}</div>
+          <div>
+            <h3>${item.title}</h3>
+            <p>${item.text}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderContacts(items) {
+      byId('contactList').innerHTML = items.map(item => `
+        <div class="contact-item">
+          <div>
+            <div class="contact-label">${item.label}</div>
+            <div>${item.value}</div>
+          </div>
+          <a href="${item.url}" ${item.url.startsWith('mailto:') ? '' : 'target="_blank" rel="noreferrer"'}>${item.action}</a>
+        </div>
+      `).join('');
+    }
+
+    function applyContent() {
+      document.title = `${siteContent.name} | Portfolio`;
+      byId('brandName').textContent = siteContent.name;
+      byId('footerName').textContent = siteContent.name;
+      byId('brandMark').textContent = siteContent.brandMark || initialsFromName(siteContent.name);
+
+      byId('eyebrowText').textContent = siteContent.hero.eyebrow;
+      byId('heroTitle').textContent = siteContent.hero.title;
+      byId('heroSubtitle').textContent = siteContent.hero.subtitle;
+      byId('primaryCta').textContent = siteContent.hero.primaryCta.label;
+      byId('primaryCta').href = siteContent.hero.primaryCta.href;
+      byId('secondaryCta').textContent = siteContent.hero.secondaryCta.label;
+      byId('secondaryCta').href = siteContent.hero.secondaryCta.href;
+
+      renderHeroMeta(siteContent.hero.meta);
+      renderMiniCards(siteContent.hero.sideCards);
+
+      byId('portraitLabel').textContent = siteContent.hero.portrait.label;
+      byId('portraitText').textContent = siteContent.hero.portrait.text;
+      if (siteContent.hero.portrait.image) {
+        const portrait = byId('portraitBlock');
+        portrait.classList.add('has-image');
+        portrait.style.backgroundImage = `linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)), url('${siteContent.hero.portrait.image}')`;
+      }
+
+      byId('aboutSectionNote').textContent = siteContent.about.sectionNote;
+      byId('aboutTitle').textContent = siteContent.about.title;
+      renderAboutParagraphs(siteContent.about.paragraphs);
+      byId('skillsTitle').textContent = siteContent.about.skillsTitle;
+      renderSkills(siteContent.about.skills);
+
+      byId('projectsSectionNote').textContent = siteContent.projects.sectionNote;
+      renderProjects(siteContent.projects.items);
+
+      byId('timelineSectionNote').textContent = siteContent.experience.sectionNote;
+      renderTimeline(siteContent.experience.items);
+
+      byId('contactSectionNote').textContent = siteContent.contact.sectionNote;
+      byId('contactTitle').textContent = siteContent.contact.title;
+      byId('contactCopy').textContent = siteContent.contact.copy;
+      renderContacts(siteContent.contact.items);
+
+      byId('availabilityEyebrow').textContent = siteContent.contact.availability.eyebrow;
+      byId('availabilityHeadline').textContent = siteContent.contact.availability.headline;
+      byId('availabilityCopy').textContent = siteContent.contact.availability.copy;
+      byId('resumeButton').textContent = siteContent.contact.availability.buttonLabel;
+      byId('resumeButton').href = siteContent.contact.availability.buttonUrl;
+
+      byId('year').textContent = new Date().getFullYear();
+
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      reveals.forEach((el) => observer.observe(el));
+    }
+
+    applyContent();
   </script>
 </body>
 </html>
