@@ -40,8 +40,8 @@ const siteContent = {
   },
 
   about: {
-    sectionNote:
-      "More about me!",
+    //sectionNote:
+    //  "More about me!",
     title: "Who I Am",
     paragraphs: [
       "I’m a computer engineering student who enjoys building across software and hardware. My work spans Python, C++, AI/Machine Learning, Robot Vision, SQL, digital systems, and project-driven problem solving.",
@@ -59,8 +59,8 @@ const siteContent = {
   },
 
   projects: {
-    sectionNote:
-      "",
+    //sectionNote:
+    //  "",
     items: [
       {
         title: "Machine Learning Review Analyzer",
@@ -99,8 +99,8 @@ const siteContent = {
   },
 
   experience: {
-    sectionNote:
-      "",
+    //sectionNote:
+    //  "",
     items: [
       {
         date: "2025 — Present",
@@ -144,8 +144,8 @@ const siteContent = {
   },
 
   contact: {
-    sectionNote:
-      "",
+    //sectionNote:
+    //  "",
     title: "Let’s build something useful.",
     copy:
       "Replace the links below with your real email, GitHub, LinkedIn, and resume. You can also add a Calendly link later if you want.",
