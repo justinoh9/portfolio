@@ -41,10 +41,10 @@ const siteContent = {
 
   about: {
     sectionNote:
-      "This section should feel selective and confident. Keep it focused on who you are, what you build, and where you’re headed.",
+      "More about me!",
     title: "Who I Am",
     paragraphs: [
-      "I’m a computer engineering student who enjoys building across software and hardware. My work spans Python, C++, SQL, digital systems, and project-driven problem solving.",
+      "I’m a computer engineering student who enjoys building across software and hardware. My work spans Python, C++, AI/Machine Learning, Robot Vision, SQL, digital systems, and project-driven problem solving.",
       "I’m especially interested in roles where I can grow as an engineer while shipping things that matter. I like websites that feel calm, confident, and intentional rather than crowded."
     ],
     skillsTitle: "Core Stack",
@@ -59,8 +59,8 @@ const siteContent = {
   },
 
   projects: {
-    sectionNote:
-      "Keep this tight. Three to six strong projects is much better than trying to show everything.",
+    #sectionNote:
+    #  "Keep this tight. Three to six strong projects is much better than trying to show everything.",
     items: [
       {
         title: "Amazon Review Analyzer",
@@ -99,8 +99,8 @@ const siteContent = {
   },
 
   experience: {
-    sectionNote:
-      "You do not need a huge resume here. A concise timeline of coursework, projects, and growth already works well.",
+    #sectionNote:
+    #  "You do not need a huge resume here. A concise timeline of coursework, projects, and growth already works well.",
     items: [
       {
         date: "2025 — Present",
