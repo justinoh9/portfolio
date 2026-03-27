@@ -665,6 +665,16 @@
       </div>
     </section>
 
+    <section id="personal" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><h2 id="personalSectionTitle">Beyond Engineering</h2></div>
+          <p id="personalSectionNote"></p>
+        </div>
+        <div class="projects-grid" id="personalGrid"></div>
+      </div>
+    </section>
+    
     <section id="contact" class="section">
       <div class="container">
         <div class="section-head reveal">
@@ -766,6 +776,26 @@
       }).join('');
     }
 
+    function renderPersonalPages(pages) {
+      byId('personalGrid').innerHTML = pages.map(page => {
+        const thumbStyle = page.image ? `style="background-image:url('${page.image}')"` : '';
+        const thumbClass = page.image ? 'project-thumb has-image' : 'project-thumb';
+        const tags = (page.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
+    
+        return `
+          <article class="project-card reveal">
+            <div class="${thumbClass}" ${thumbStyle}></div>
+            <div class="tag-row">${tags}</div>
+            <h3>${page.title}</h3>
+            <p>${page.description}</p>
+            <div class="project-links">
+              <a href="${page.href}">Open Page</a>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
     function renderTimeline(items) {
       byId('timelineList').innerHTML = items.map(item => `
         <div class="timeline-item">
@@ -804,8 +834,12 @@
       byId('secondaryCta').textContent = siteContent.hero.secondaryCta.label;
       byId('secondaryCta').href = siteContent.hero.secondaryCta.href;
 
+      byId('personalSectionTitle').textContent = siteContent.personal.sectionTitle;
+      byId('personalSectionNote').textContent = siteContent.personal.sectionNote;
+
       renderHeroMeta(siteContent.hero.meta);
       renderMiniCards(siteContent.hero.sideCards);
+      renderPersonalPages(siteContent.personal.pages);
 
       byId('portraitLabel').textContent = siteContent.hero.portrait.label;
       byId('portraitText').textContent = siteContent.hero.portrait.text;
@@ -813,6 +847,7 @@
         const portrait = byId('portraitBlock');
         portrait.classList.add('has-image');
         portrait.style.backgroundImage = `linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)), url('${siteContent.hero.portrait.image}')`;
+      
       }
 
       byId('aboutSectionNote').textContent = siteContent.about.sectionNote;
