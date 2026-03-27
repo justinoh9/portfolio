@@ -157,3 +157,18 @@ const siteContent = {
   }
 };
 
+const cookingItems = [
+  {
+    title: "Steak Rice Bowl",
+    image: "assets/cooking/steak-bowl.jpg",
+    description: "Simple, high-protein, and one of my favorite meals to make when I want something filling."
+  }
+];
+
+const carItems = [
+  {
+    title: "2019 BMW 330i xDrive",
+    image: "assets/cars/330i.jpg",
+    description: "A car that got me more interested in sound, mods, and how small changes affect the overall driving experience."
+  }
+];
