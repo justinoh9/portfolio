@@ -157,3 +157,27 @@ const siteContent = {
   }
 };
 
+cooking: {
+  eyebrow: "Personal Page",
+  pageTitle: "Cooking",
+  intro: "Meals, recipes, and food I’ve made or enjoyed recently.",
+  sectionTitle: "Recent Meals",
+  sectionNote: "A more personal side of the site.",
+  items: [
+    {
+      title: "Steak Rice Bowl",
+      image: "assets/cooking/steak-bowl.jpg",
+      description: "Simple, filling, and one of my favorite meals to make.",
+      note: "High protein and easy to make consistently.",
+      tags: ["Homemade", "High Protein"]
+    },
+    {
+      title: "Pasta Night",
+      image: "assets/cooking/pasta.jpg",
+      description: "A meal I liked enough to want to document here.",
+      tags: ["Comfort Food"]
+    }
+  ]
+};
+
+

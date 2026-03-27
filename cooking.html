@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cooking | Justin Oh</title>
+  <meta name="description" content="A personal page featuring meals and recipes Justin has cooked or enjoyed recently." />
+  <style>
+    :root {
+      --bg: #090b10;
+      --bg-soft: #10141d;
+      --card: rgba(18, 24, 36, 0.72);
+      --card-border: rgba(255,255,255,0.08);
+      --text: #f4f7fb;
+      --muted: #98a4b8;
+      --line: rgba(255,255,255,0.09);
+      --accent: #7aa2ff;
+      --accent-2: #9a7cff;
+      --shadow: 0 18px 60px rgba(0,0,0,0.35);
+      --max: 1180px;
+      --radius: 26px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(122,162,255,0.16), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(154,124,255,0.14), transparent 25%),
+        radial-gradient(circle at 50% 80%, rgba(122,162,255,0.09), transparent 30%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 1rem 0;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(to bottom, rgba(9,11,16,0.75), rgba(9,11,16,0.2));
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border: 1px solid var(--card-border);
+      background: rgba(14,18,27,0.7);
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      padding: 0.9rem 1.2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 0.95rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 10px 30px rgba(122,162,255,0.28);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover,
+    .card-link:hover,
+    .back-link:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 3rem 0 2rem;
+    }
+
+    .hero-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      padding: 2.5rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: fit-content;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #d8e2f2;
+      font-size: 0.9rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 0 6px rgba(122,162,255,0.12);
+    }
+
+    h1 {
+      margin: 1rem 0 0.8rem;
+      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 10ch;
+    }
+
+    .hero-copy {
+      max-width: 62ch;
+      color: #dbe5f6;
+      font-size: 1.05rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      margin-top: 1.6rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.95rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      font-weight: 600;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border: none;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+
+    .section {
+      padding: 1rem 0 3.5rem;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1.4rem;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 52ch;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 24px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      transition: transform 0.22s ease, border-color 0.22s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(122,162,255,0.35);
+    }
+
+    .card-image {
+      aspect-ratio: 16 / 10;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(135deg, rgba(122,162,255,0.2), rgba(154,124,255,0.15)),
+        linear-gradient(180deg, #0f1521, #171d29);
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .card-image.placeholder::after {
+      content: "Add image in content.js";
+      position: absolute;
+      inset: auto 1rem 1rem 1rem;
+      display: inline-flex;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      background: rgba(9,11,16,0.62);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #dbe5f6;
+      font-size: 0.9rem;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .tag {
+      padding: 0.38rem 0.72rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #d9e2f4;
+      font-size: 0.84rem;
+    }
+
+    .card-link {
+      margin-top: 0.2rem;
+      color: #dbe5f7;
+      font-weight: 650;
+    }
+
+    .empty-state {
+      padding: 1.4rem;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      padding: 0 0 3rem;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--line);
+      padding-top: 1.4rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-card,
+      .card {
+        padding: 1.1rem;
+      }
+
+      h1 {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-wrap">
+    <div class="container">
+      <nav>
+        <a href="index.html" class="brand">
+          <span class="brand-mark" id="brandMark">JO</span>
+          <span id="brandName">Justin Oh</span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html">Portfolio</a>
+          <a href="cooking.html">Cooking</a>
+          <a href="cars.html">Cars</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card reveal">
+          <div class="eyebrow" id="pageEyebrow">Personal Page</div>
+          <h1 id="pageTitle">Cooking</h1>
+          <p class="hero-copy" id="pageIntro">
+            Meals, recipes, and food I’ve made or enjoyed recently.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#entries">See Entries</a>
+            <a class="btn btn-secondary back-link" href="index.html">Back to Portfolio</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="entries">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><h2 id="sectionTitle">Recent Meals</h2></div>
+          <p id="sectionNote">A more personal side of the site.</p>
+        </div>
+        <div class="grid" id="entriesGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> <span id="footerName">Justin Oh</span></div>
+      <div><a href="index.html">Main portfolio</a></div>
+    </div>
+  </footer>
+
+  <script src="content.js"></script>
+  <script>
+    const byId = (id) => document.getElementById(id);
+
+    function initialsFromName(name) {
+      return name
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0].toUpperCase())
+        .join('');
+    }
+
+    function renderItems(items) {
+      const grid = byId('entriesGrid');
+
+      if (!items || !items.length) {
+        grid.innerHTML = `
+          <div class="empty-state reveal">
+            No cooking entries yet. Add items to <strong>siteContent.cooking.items</strong> in <strong>content.js</strong>.
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map((item) => {
+        const imageClass = item.image ? 'card-image' : 'card-image placeholder';
+        const imageStyle = item.image ? `style="background-image:url('${item.image}')"` : '';
+        const tags = (item.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
+        const extra = item.link && item.linkLabel
+          ? `<a class="card-link" href="${item.link}" ${item.link.startsWith('#') ? '' : 'target="_blank" rel="noreferrer"'}>${item.linkLabel}</a>`
+          : '';
+
+        return `
+          <article class="card reveal">
+            <div class="${imageClass}" ${imageStyle}></div>
+            ${tags ? `<div class="tag-row">${tags}</div>` : ''}
+            <h3>${item.title || 'Untitled entry'}</h3>
+            <p>${item.description || ''}</p>
+            ${item.note ? `<p>${item.note}</p>` : ''}
+            ${extra}
+          </article>
+        `;
+      }).join('');
+    }
+
+    function applyContent() {
+      const page = siteContent?.cooking || {};
+
+      document.title = `${page.pageTitle || 'Cooking'} | ${siteContent?.name || 'Portfolio'}`;
+      byId('brandName').textContent = siteContent?.name || 'Justin Oh';
+      byId('footerName').textContent = siteContent?.name || 'Justin Oh';
+      byId('brandMark').textContent = siteContent?.brandMark || initialsFromName(siteContent?.name || 'Justin Oh');
+
+      byId('pageEyebrow').textContent = page.eyebrow || 'Personal Page';
+      byId('pageTitle').textContent = page.pageTitle || 'Cooking';
+      byId('pageIntro').textContent = page.intro || 'Meals, recipes, and food I’ve made or enjoyed recently.';
+      byId('sectionTitle').textContent = page.sectionTitle || 'Recent Meals';
+      byId('sectionNote').textContent = page.sectionNote || 'A more personal side of the site.';
+
+      renderItems(page.items || []);
+      byId('year').textContent = new Date().getFullYear();
+
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      reveals.forEach((el) => observer.observe(el));
+    }
+
+    applyContent();
+  </script>
+</body>
+</html>
+
