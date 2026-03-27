@@ -59,8 +59,8 @@ const siteContent = {
   },
 
   projects: {
-    #sectionNote:
-    #  "Keep this tight. Three to six strong projects is much better than trying to show everything.",
+    sectionNote:
+      "",
     items: [
       {
         title: "Machine Learning Review Analyzer",
@@ -99,8 +99,8 @@ const siteContent = {
   },
 
   experience: {
-    #sectionNote:
-    #  "You do not need a huge resume here. A concise timeline of coursework, projects, and growth already works well.",
+    sectionNote:
+      "",
     items: [
       {
         date: "2025 — Present",
@@ -145,7 +145,7 @@ const siteContent = {
 
   contact: {
     sectionNote:
-      "Make it very easy for recruiters, collaborators, and classmates to reach you in one step.",
+      "",
     title: "Let’s build something useful.",
     copy:
       "Replace the links below with your real email, GitHub, LinkedIn, and resume. You can also add a Calendly link later if you want.",
