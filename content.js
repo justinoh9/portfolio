@@ -22,13 +22,13 @@ const siteContent = {
     ],
     portrait: {
       label: "Current Direction",
-      text: "Building stronger software, sharper projects, and a portfolio that feels deliberate.",
+      text: "Building stronger software skills and projects focusing on AI",
       image: "assets/Screenshot 2026-03-27 163232.png"
     },
     sideCards: [
       {
         label: "Recent Work",
-        title: "Amazon Review Analyzer",
+        title: "Machine Learning Review Analyzer",
         text: "Python scraper + NLP workflow for e-commerce insight."
       },
       {
