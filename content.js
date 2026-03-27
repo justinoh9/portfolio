@@ -63,7 +63,7 @@ const siteContent = {
     #  "Keep this tight. Three to six strong projects is much better than trying to show everything.",
     items: [
       {
-        title: "Amazon Review Analyzer",
+        title: "Machine Learning Review Analyzer",
         description:
           "A Python-based pipeline that collects large review datasets and analyzes sentiment for e-commerce insights. Built to show data handling, automation, and practical ML-adjacent thinking.",
         image: "",
@@ -85,14 +85,14 @@ const siteContent = {
         ]
       },
       {
-        title: "Embedded & Digital Design Work",
+        title: "Airplane Ticket Reservation System",
         description:
-          "Lab and project work involving timing, PWM, logic design, and hardware reasoning. This section can become a single featured case study with visuals from your boards, code, and diagrams.",
+          "Ticket reservation system. Using this system, customers can search for flights (one way or round trip), purchase flight tickets, view their future flight status, or see their past flights etc. Airline staff can add new airplanes, create new flights, and update flight status..",
         image: "",
-        tags: ["Embedded", "PWM", "Verilog"],
+        tags: ["Python", "SQL", "Databases"],
         links: [
           { label: "Overview", url: "#" },
-          { label: "Details", url: "#" }
+          { label: "Code", url: "https://github.com/justinoh9/Airplane-Ticket-Reservation-System" }
         ]
       }
     ]
