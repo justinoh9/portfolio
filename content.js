@@ -23,7 +23,7 @@ const siteContent = {
     portrait: {
       label: "Current Direction",
       text: "Building stronger software, sharper projects, and a portfolio that feels deliberate.",
-      image: "assets/professional headshot (desaturated).jpg"
+      image: "assets/Screenshot 2026-03-27 163232.png"
     },
     sideCards: [
       {
