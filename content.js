@@ -154,11 +154,8 @@ const siteContent = {
       buttonLabel: "Download Resume",
       buttonUrl: "assets/resume.pdf"
     }
-  }
-};
-const cookingItems = [
-  {
-    cooking: {
+  },
+  cooking: {
     eyebrow: "Personal Page",
     pageTitle: "Cooking",
     intro: "Meals, recipes, and food I’ve made or enjoyed recently.",
@@ -179,14 +176,23 @@ const cookingItems = [
         tags: ["Comfort Food"]
       }
     ]
-  }
-];
-const carItems = [
-  {
-    title: "2019 BMW 330i xDrive",
-    image: "assets/cars/330i.jpg",
-    description: "A car that got me more interested in sound, mods, and how small changes affect the overall driving experience."
-  }
-];
+  },
 
+  cars: {
+    eyebrow: "Personal Page",
+    pageTitle: "Cars",
+    intro: "Cars I enjoy driving, thinking about, and working on.",
+    sectionTitle: "Cars & Notes",
+    sectionNote: "A personal page for cars, mods, and things I find interesting.",
+    items: [
+      {
+        title: "2019 BMW 330i xDrive",
+        image: "assets/cars/330i.jpg",
+        description: "A car that got me more interested in sound, mods, and how small changes affect the overall driving experience.",
+        note: "This page can include ownership notes, mods, impressions, and photos.",
+        tags: ["BMW", "Personal Car", "Mods"]
+      }
+    ]
+  }
+};
 
