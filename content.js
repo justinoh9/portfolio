@@ -119,6 +119,29 @@ const siteContent = {
       }
     ]
   },
+  personal: {
+    sectionTitle: "Beyond Engineering",
+    sectionNote:
+      "A more personal side of the site — things I genuinely enjoy outside of school and projects.",
+    pages: [
+      {
+        title: "Cooking",
+        description:
+          "Meals, recipes, and food I’ve made or enjoyed recently.",
+        image: "assets/cooking/cover.jpg",
+        href: "cooking.html",
+        tags: ["Food", "Recipes", "Personal"]
+      },
+      {
+        title: "Cars",
+        description:
+          "Cars I enjoy driving, thinking about, and working on.",
+        image: "assets/cars/cover.jpg",
+        href: "cars.html",
+        tags: ["Cars", "Mods", "Personal"]
+      }
+    ]
+  },
 
   contact: {
     sectionNote:
