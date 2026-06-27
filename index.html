@@ -829,7 +829,7 @@
     </div>
   </footer>
 
-  <script src="content.js"></script>
+  <script src="content.js?v=3"></script>
   <script>
     const byId = (id) => document.getElementById(id);
 
@@ -843,7 +843,7 @@
     }
 
     function renderHeroMeta(items) {
-      byId('heroMeta').innerHTML = items.map(item => `
+      byId('heroMeta').innerHTML = (items || []).map(item => `
         <div class="meta-card">
           <div class="meta-label">${item.label}</div>
           <div class="meta-value">${item.value}</div>
@@ -852,7 +852,7 @@
     }
 
     function renderMiniCards(items) {
-      byId('miniCards').innerHTML = items.map(item => `
+      byId('miniCards').innerHTML = (items || []).map(item => `
         <div class="mini-card">
           <div class="meta-label">${item.label}</div>
           <h3>${item.title}</h3>
@@ -862,11 +862,11 @@
     }
 
     function renderAboutParagraphs(paragraphs) {
-      byId('aboutBody').innerHTML = paragraphs.map(text => `<p>${text}</p>`).join('');
+      byId('aboutBody').innerHTML = (paragraphs || []).map(text => `<p>${text}</p>`).join('');
     }
 
     function renderSkills(groups) {
-      byId('skillsList').innerHTML = groups.map(group => `
+      byId('skillsList').innerHTML = (groups || []).map(group => `
         <div class="skill-group">
           <div class="skill-group-label">${group.label}</div>
           <div class="skill-chip-row">
@@ -877,7 +877,7 @@
     }
 
     function renderProjects(projects) {
-      byId('projectsGrid').innerHTML = projects.map(project => {
+      byId('projectsGrid').innerHTML = (projects || []).map(project => {
         const thumbStyle = project.image ? `style="background-image:url('${project.image}')"` : '';
         const thumbClass = project.image ? 'project-thumb has-image' : 'project-thumb';
         const tags = (project.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
@@ -901,7 +901,7 @@
     }
 
     function renderPersonalPages(pages) {
-      byId('personalGrid').innerHTML = pages.map(page => {
+      byId('personalGrid').innerHTML = (pages || []).map(page => {
         const thumbStyle = page.image ? `style="background-image:url('${page.image}')"` : '';
         const thumbClass = page.image ? 'project-thumb has-image' : 'project-thumb';
         const tags = (page.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
@@ -921,7 +921,7 @@
     }
 
     function renderTimeline(items) {
-      byId('timelineList').innerHTML = items.map(item => {
+      byId('timelineList').innerHTML = (items || []).map(item => {
         const heading = item.role || item.title || '';
         const company = item.company
           ? `<div class="timeline-company">${item.company}${item.location ? ` · ${item.location}` : ''}</div>`
@@ -944,7 +944,7 @@
     }
 
     function renderContacts(items) {
-      byId('contactList').innerHTML = items.map(item => `
+      byId('contactList').innerHTML = (items || []).map(item => `
         <div class="contact-item">
           <div>
             <div class="contact-label">${item.label}</div>
@@ -1087,7 +1087,25 @@
       }
     }
 
-    applyContent();
+    try {
+      if (typeof siteContent === 'undefined') {
+        throw new Error('content.js failed to load');
+      }
+      applyContent();
+    } catch (err) {
+      // Never leave a fully blank page — show a minimal fallback and log the cause.
+      console.error('Portfolio render error:', err);
+      document.title = 'Justin Oh | Portfolio';
+      const main = document.getElementById('top');
+      if (main) {
+        main.insertAdjacentHTML('afterbegin',
+          '<div class="container" style="padding:4rem 0;text-align:center;color:var(--muted)">' +
+          '<h1 style="font-size:2rem">Justin Oh</h1>' +
+          '<p>Having trouble loading? Try a hard refresh (Ctrl/Cmd + Shift + R).</p>' +
+          '<p><a class="btn btn-primary" href="assets/Justin-Oh-Resume.pdf" target="_blank" rel="noreferrer">Download Résumé</a></p>' +
+          '</div>');
+      }
+    }
   </script>
 </body>
 </html>
