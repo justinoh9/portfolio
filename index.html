@@ -523,6 +523,70 @@
       flex-wrap: wrap;
     }
 
+    .github-stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .github-count {
+      padding: 1.1rem 1.3rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .github-count strong {
+      display: block;
+      font-size: 1.9rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .github-count span {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .repo-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      padding: 1.3rem;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.22s ease, border-color 0.22s ease;
+    }
+
+    .repo-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(122,162,255,0.35);
+    }
+
+    .repo-card h4 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .repo-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      flex: 1;
+    }
+
+    .repo-meta {
+      display: flex;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
     .reveal {
       opacity: 0;
       transform: translateY(24px);
@@ -567,7 +631,8 @@
       }
 
       .hero-meta,
-      .mini-grid {
+      .mini-grid,
+      .github-stat-row {
         grid-template-columns: 1fr;
       }
 
@@ -652,6 +717,15 @@
           <p id="projectsSectionNote"></p>
         </div>
         <div class="projects-grid" id="projectsGrid"></div>
+
+        <div id="githubBlock" class="reveal" hidden style="margin-top:2.4rem;">
+          <div class="section-head" style="margin-bottom:1rem;">
+            <div><h3 style="margin:0; font-size:1.3rem; letter-spacing:-0.02em;">Live from GitHub</h3></div>
+            <a id="githubProfileLink" href="https://github.com/justinoh9" target="_blank" rel="noreferrer" style="color:var(--muted); font-weight:600;">View profile →</a>
+          </div>
+          <div class="github-stat-row" id="githubCounts"></div>
+          <div class="projects-grid" id="githubRepos" style="margin-top:1rem;"></div>
+        </div>
       </div>
     </section>
 
@@ -877,6 +951,8 @@
 
       byId('year').textContent = new Date().getFullYear();
 
+      loadGithubStats('justinoh9');
+
       const reveals = document.querySelectorAll('.reveal');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -888,6 +964,64 @@
       }, { threshold: 0.12 });
 
       reveals.forEach((el) => observer.observe(el));
+    }
+
+    const escapeHtml = (str) => String(str ?? '').replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+
+    async function loadGithubStats(username) {
+      const block = byId('githubBlock');
+      try {
+        const [userRes, reposRes] = await Promise.all([
+          fetch(`https://api.github.com/users/${username}`),
+          fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
+        ]);
+        if (!userRes.ok || !reposRes.ok) throw new Error('GitHub API error');
+        const user = await userRes.json();
+        const repos = await reposRes.json();
+
+        byId('githubProfileLink').href = user.html_url || `https://github.com/${username}`;
+
+        const counts = [
+          { value: user.public_repos, label: 'Public Repos' },
+          { value: user.followers, label: 'Followers' },
+          { value: user.following, label: 'Following' }
+        ];
+        byId('githubCounts').innerHTML = counts.map(c => `
+          <div class="github-count">
+            <strong>${Number.isFinite(c.value) ? c.value : '—'}</strong>
+            <span>${c.label}</span>
+          </div>
+        `).join('');
+
+        // Skip forks and the portfolio repo itself; show the 3 most recently touched.
+        const featured = repos
+          .filter(r => !r.fork && r.name.toLowerCase() !== 'portfolio')
+          .slice(0, 3);
+
+        byId('githubRepos').innerHTML = featured.map(r => {
+          const updated = r.updated_at
+            ? new Date(r.updated_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+            : '';
+          return `
+            <a class="repo-card" href="${escapeHtml(r.html_url)}" target="_blank" rel="noreferrer">
+              <h4>${escapeHtml(r.name)}</h4>
+              <p>${escapeHtml(r.description || 'No description provided.')}</p>
+              <div class="repo-meta">
+                ${r.language ? `<span>${escapeHtml(r.language)}</span>` : ''}
+                ${updated ? `<span>Updated ${updated}</span>` : ''}
+              </div>
+            </a>
+          `;
+        }).join('');
+
+        block.hidden = false;
+        block.classList.add('visible');
+      } catch (err) {
+        // Hide the whole block on failure (offline, rate-limited) — no broken UI.
+        block.hidden = true;
+      }
     }
 
     applyContent();

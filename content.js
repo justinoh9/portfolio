@@ -65,12 +65,11 @@ const siteContent = {
       {
         title: "Machine Learning Review Analyzer",
         description:
-          "A Python-based pipeline that collects large review datasets and analyzes sentiment for e-commerce insights. Built to show data handling, automation, and practical ML-adjacent thinking.",
+          "A Python pipeline that trains a TF-IDF + Logistic Regression sentiment classifier on labeled review data (~88% accuracy), then scores new e-commerce reviews into a report: sentiment breakdown, a health score, model-derived themes, a stars-vs-sentiment mismatch check, and suspicious-review flags. Ships as two CLIs with tests.",
         image: "",
-        tags: ["Python", "NLP", "Scraping"],
+        tags: ["Python", "scikit-learn", "NLP"],
         links: [
-          { label: "Live", url: "#" },
-          { label: "Code", url: "https://github.com/justinoh9" }
+          { label: "Code", url: "https://github.com/justinoh9/machine-learning-review-analyzer" }
         ]
       },
       {
@@ -93,6 +92,54 @@ const siteContent = {
         links: [
           { label: "Overview", url: "#" },
           { label: "Code", url: "https://github.com/justinoh9/Airplane-Ticket-Reservation-System" }
+        ]
+      },
+      {
+        // Real, verified description — this is the chatbot project Justin built.
+        title: "Jason — AI Leasing Assistant",
+        description:
+          "An AI assistant that runs leasing conversations end to end: it answers prospect messages across WhatsApp and Discord, matches renters to available units, schedules viewings, and handles bounded rent negotiation — escalating to a human when needed. Backed by a FastAPI service and a React operator dashboard for live monitoring and overrides.",
+        image: "",
+        tags: ["Python", "FastAPI", "React", "AI"],
+        links: [
+          { label: "Overview", url: "#" },
+          { label: "Code", url: "https://github.com/justinoh9" }
+        ]
+      },
+      // REVIEW: The three entries below are real projects of Justin's, but the
+      // copy is written conservatively because the exact details weren't verified.
+      // Replace each description/links/tags with the accurate specifics when ready.
+      {
+        title: "Coravii",
+        description:
+          "An e-commerce venture I co-founded — work spanning the storefront, the customer experience, and the operations behind it.",
+        image: "",
+        tags: ["E-Commerce", "Full-Stack", "Founder"],
+        links: [
+          { label: "Overview", url: "#" },
+          { label: "Code", url: "https://github.com/justinoh9" }
+        ]
+      },
+      {
+        title: "Solar Umbrella",
+        description:
+          "A solar-powered umbrella concept pairing embedded electronics with practical hardware design to capture energy while providing shade.",
+        image: "",
+        tags: ["Embedded", "Hardware"],
+        links: [
+          { label: "Overview", url: "#" },
+          { label: "Code", url: "https://github.com/justinoh9" }
+        ]
+      },
+      {
+        title: "AeroMod Flight Computer",
+        description:
+          "Flight-computer work done as Technology Officer at AeroMod Systems, spanning embedded firmware and sensor integration.",
+        image: "",
+        tags: ["Embedded", "C++", "Firmware"],
+        links: [
+          { label: "Overview", url: "#" },
+          { label: "Code", url: "https://github.com/justinoh9" }
         ]
       }
     ]
@@ -128,7 +175,7 @@ const siteContent = {
         title: "Cooking",
         description:
           "Meals, recipes, and food I’ve made or enjoyed recently.",
-        image: "assets/cooking/cover.jpg",
+        image: "",
         href: "cooking.html",
         tags: ["Food", "Recipes", "Personal"]
       },
@@ -136,7 +183,7 @@ const siteContent = {
         title: "Cars",
         description:
           "Cars I enjoy driving, thinking about, and working on.",
-        image: "assets/cars/cover.jpg",
+        image: "",
         href: "cars.html",
         tags: ["Cars", "Mods", "Personal"]
       }
@@ -148,7 +195,7 @@ const siteContent = {
     //  "",
     title: "Let’s build something useful.",
     copy:
-      "Replace the links below with your real email, GitHub, LinkedIn, and resume. You can also add a Calendly link later if you want.",
+      "I’m always glad to talk about engineering, internships, or interesting problems — reach out through any of these.",
     items: [
       {
         label: "Email",
@@ -173,7 +220,7 @@ const siteContent = {
       eyebrow: "Available for conversation",
       headline: "Open to internships, projects, and good opportunities.",
       copy:
-        "This panel is a good place for a clean statement of intent, a resume button, or a short line that gives the page personality without clutter.",
+        "Currently a computer engineering student at NYU looking for software and embedded engineering internships, plus interesting side projects.",
       buttonLabel: "Download Resume",
       buttonUrl: "assets/resume.pdf"
     }
@@ -187,14 +234,14 @@ const siteContent = {
     items: [
       {
         title: "Steak Rice Bowl",
-        image: "assets/cooking/steak-bowl.jpg",
+        image: "",
         description: "Simple, filling, and one of my favorite meals to make.",
         note: "High protein and easy to make consistently.",
         tags: ["Homemade", "High Protein"]
       },
       {
         title: "Pasta Night",
-        image: "assets/cooking/pasta.jpg",
+        image: "",
         description: "A meal I liked enough to want to document here.",
         tags: ["Comfort Food"]
       }
@@ -210,7 +257,7 @@ const siteContent = {
     items: [
       {
         title: "2019 BMW 330i xDrive",
-        image: "assets/cars/330i.jpg",
+        image: "",
         description: "A car that got me more interested in sound, mods, and how small changes affect the overall driving experience.",
         note: "This page can include ownership notes, mods, impressions, and photos.",
         tags: ["BMW", "Personal Car", "Mods"]
