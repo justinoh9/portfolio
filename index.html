@@ -640,6 +640,46 @@
         max-width: 100%;
       }
     }
+
+    /* Grouped skills */
+    .skills-list { flex-direction: column; align-items: stretch; gap: 1.1rem; }
+    .skill-group-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .skill-chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-tag {
+      padding: 0.42rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #dbe5f6;
+    }
+
+    /* Project meta + non-link note */
+    .project-meta {
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin: -0.4rem 0 0.1rem;
+      font-weight: 600;
+    }
+    .project-note { color: var(--muted); font-size: 0.85rem; font-style: italic; }
+
+    /* Experience timeline detail */
+    .timeline-company {
+      color: #cdd8ea;
+      font-size: 0.94rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-bullets { margin: 0.4rem 0 0; padding-left: 1.05rem; color: var(--muted); }
+    .timeline-bullets li { margin-bottom: 0.4rem; }
+    .timeline-bullets li:last-child { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -742,7 +782,7 @@
     <section id="experience" class="section">
       <div class="container">
         <div class="section-head reveal">
-          <div><h2>Experience & Growth</h2></div>
+          <div><h2>Experience</h2></div>
           <p id="timelineSectionNote"></p>
         </div>
         <div class="glass timeline reveal" id="timelineList"></div>
@@ -825,11 +865,13 @@
       byId('aboutBody').innerHTML = paragraphs.map(text => `<p>${text}</p>`).join('');
     }
 
-    function renderSkills(skills) {
-      byId('skillsList').innerHTML = skills.map(skill => `
-        <div class="skill-chip">
-          <span>${skill.name}</span>
-          <span>${skill.detail}</span>
+    function renderSkills(groups) {
+      byId('skillsList').innerHTML = groups.map(group => `
+        <div class="skill-group">
+          <div class="skill-group-label">${group.label}</div>
+          <div class="skill-chip-row">
+            ${group.items.map(item => `<span class="skill-tag">${item}</span>`).join('')}
+          </div>
         </div>
       `).join('');
     }
@@ -839,12 +881,18 @@
         const thumbStyle = project.image ? `style="background-image:url('${project.image}')"` : '';
         const thumbClass = project.image ? 'project-thumb has-image' : 'project-thumb';
         const tags = (project.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
-        const links = (project.links || []).map(link => `<a href="${link.url}" ${link.url.startsWith('#') ? '' : 'target="_blank" rel="noreferrer"'}>${link.label}</a>`).join('');
+        const links = (project.links || []).map(link => {
+          if (!link.url) return `<span class="project-note">${link.label}</span>`;
+          const external = !link.url.startsWith('#');
+          return `<a href="${link.url}" ${external ? 'target="_blank" rel="noreferrer"' : ''}>${link.label}</a>`;
+        }).join('');
+        const meta = project.meta ? `<div class="project-meta">${project.meta}</div>` : '';
         return `
           <article class="project-card reveal">
             <div class="${thumbClass}" ${thumbStyle}></div>
             <div class="tag-row">${tags}</div>
             <h3>${project.title}</h3>
+            ${meta}
             <p>${project.description}</p>
             <div class="project-links">${links}</div>
           </article>
@@ -873,15 +921,26 @@
     }
 
     function renderTimeline(items) {
-      byId('timelineList').innerHTML = items.map(item => `
-        <div class="timeline-item">
-          <div class="timeline-date">${item.date}</div>
-          <div>
-            <h3>${item.title}</h3>
-            <p>${item.text}</p>
+      byId('timelineList').innerHTML = items.map(item => {
+        const heading = item.role || item.title || '';
+        const company = item.company
+          ? `<div class="timeline-company">${item.company}${item.location ? ` · ${item.location}` : ''}</div>`
+          : '';
+        const bullets = (item.bullets || []).map(b => `<li>${b}</li>`).join('');
+        const body = bullets
+          ? `<ul class="timeline-bullets">${bullets}</ul>`
+          : (item.text ? `<p>${item.text}</p>` : '');
+        return `
+          <div class="timeline-item">
+            <div class="timeline-date">${item.date}</div>
+            <div>
+              <h3>${heading}</h3>
+              ${company}
+              ${body}
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderContacts(items) {
@@ -909,6 +968,10 @@
       byId('primaryCta').href = siteContent.hero.primaryCta.href;
       byId('secondaryCta').textContent = siteContent.hero.secondaryCta.label;
       byId('secondaryCta').href = siteContent.hero.secondaryCta.href;
+      if ((siteContent.hero.secondaryCta.href || '').endsWith('.pdf')) {
+        byId('secondaryCta').target = '_blank';
+        byId('secondaryCta').rel = 'noreferrer';
+      }
 
       byId('personalSectionTitle').textContent = siteContent.personal.sectionTitle;
       byId('personalSectionNote').textContent = siteContent.personal.sectionNote;
@@ -930,7 +993,7 @@
       byId('aboutTitle').textContent = siteContent.about.title;
       renderAboutParagraphs(siteContent.about.paragraphs);
       byId('skillsTitle').textContent = siteContent.about.skillsTitle;
-      renderSkills(siteContent.about.skills);
+      renderSkills(siteContent.about.skillGroups);
 
       byId('projectsSectionNote').textContent = siteContent.projects.sectionNote;
       renderProjects(siteContent.projects.items);
