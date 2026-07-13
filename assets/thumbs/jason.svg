@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1320"/>
+      <stop offset="1" stop-color="#141a2b"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7aa2ff"/>
+      <stop offset="1" stop-color="#9a7cff"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3fd08b"/>
+      <stop offset="1" stop-color="#2ba86d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.2" cy="0.1" r="0.9">
+      <stop offset="0" stop-color="#7aa2ff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#7aa2ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+
+  <!-- phone with chat -->
+  <g transform="translate(70,60)">
+    <rect x="0" y="0" width="240" height="380" rx="28" fill="#0a0e18" stroke="rgba(255,255,255,0.12)"/>
+    <rect x="18" y="16" width="204" height="34" rx="17" fill="rgba(255,255,255,0.06)"/>
+    <circle cx="38" cy="33" r="11" fill="url(#green)"/>
+    <text x="58" y="38" fill="#e8eefb" font-size="14" font-weight="600">Jason · online</text>
+
+    <!-- incoming -->
+    <rect x="18" y="66" width="150" height="40" rx="14" fill="rgba(255,255,255,0.08)"/>
+    <rect x="30" y="80" width="110" height="7" rx="3.5" fill="rgba(255,255,255,0.35)"/>
+    <rect x="30" y="92" width="70" height="7" rx="3.5" fill="rgba(255,255,255,0.22)"/>
+
+    <!-- outgoing (bot) -->
+    <rect x="72" y="118" width="150" height="56" rx="14" fill="rgba(63,208,139,0.18)" stroke="rgba(63,208,139,0.35)"/>
+    <rect x="84" y="132" width="118" height="7" rx="3.5" fill="rgba(214,255,235,0.6)"/>
+    <rect x="84" y="144" width="96" height="7" rx="3.5" fill="rgba(214,255,235,0.45)"/>
+    <rect x="84" y="156" width="60" height="7" rx="3.5" fill="rgba(214,255,235,0.3)"/>
+
+    <!-- incoming -->
+    <rect x="18" y="186" width="120" height="40" rx="14" fill="rgba(255,255,255,0.08)"/>
+    <rect x="30" y="200" width="86" height="7" rx="3.5" fill="rgba(255,255,255,0.35)"/>
+    <rect x="30" y="212" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.22)"/>
+
+    <!-- outgoing scheduled viewing card -->
+    <rect x="52" y="238" width="170" height="72" rx="14" fill="rgba(122,162,255,0.14)" stroke="rgba(122,162,255,0.4)"/>
+    <rect x="66" y="252" width="16" height="16" rx="4" fill="url(#acc)"/>
+    <text x="90" y="265" fill="#dbe5f6" font-size="12" font-weight="600">Viewing scheduled</text>
+    <rect x="66" y="278" width="120" height="6" rx="3" fill="rgba(219,229,246,0.4)"/>
+    <rect x="66" y="290" width="84" height="6" rx="3" fill="rgba(219,229,246,0.25)"/>
+
+    <!-- input -->
+    <rect x="18" y="326" width="204" height="36" rx="18" fill="rgba(255,255,255,0.06)"/>
+    <circle cx="204" cy="344" r="13" fill="url(#acc)"/>
+    <path d="M199 344h10m0 0-4-4m4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- architecture nodes -->
+  <g transform="translate(370,84)">
+    <text x="0" y="0" fill="#98a4b8" font-size="13" letter-spacing="2" font-weight="600">AGENTIC PIPELINE</text>
+
+    <g transform="translate(0,26)">
+      <rect width="170" height="54" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(122,162,255,0.45)"/>
+      <text x="16" y="24" fill="#e8eefb" font-size="14" font-weight="600">Claude tool loop</text>
+      <text x="16" y="42" fill="#98a4b8" font-size="12">9+ tools · escalation</text>
+    </g>
+
+    <g transform="translate(210,26)">
+      <rect width="160" height="54" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.14)"/>
+      <text x="16" y="24" fill="#e8eefb" font-size="14" font-weight="600">FastAPI</text>
+      <text x="16" y="42" fill="#98a4b8" font-size="12">Python backend</text>
+    </g>
+
+    <g transform="translate(0,110)">
+      <rect width="170" height="54" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.14)"/>
+      <text x="16" y="24" fill="#e8eefb" font-size="14" font-weight="600">PostgreSQL</text>
+      <text x="16" y="42" fill="#98a4b8" font-size="12">SQLAlchemy</text>
+    </g>
+
+    <g transform="translate(210,110)">
+      <rect width="160" height="54" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.14)"/>
+      <text x="16" y="24" fill="#e8eefb" font-size="14" font-weight="600">React admin</text>
+      <text x="16" y="42" fill="#98a4b8" font-size="12">Vite dashboard</text>
+    </g>
+
+    <!-- connectors -->
+    <path d="M170 53h40M170 137h40M85 80v30M290 80v30" stroke="rgba(122,162,255,0.4)" stroke-width="2" stroke-dasharray="4 5"/>
+
+    <!-- production badge -->
+    <g transform="translate(0,206)">
+      <rect width="188" height="38" rx="19" fill="rgba(63,208,139,0.12)" stroke="rgba(63,208,139,0.4)"/>
+      <circle cx="22" cy="19" r="5" fill="#3fd08b"/>
+      <text x="38" y="24" fill="#bdf2d8" font-size="13" font-weight="600">Live in production</text>
+    </g>
+    <g transform="translate(202,206)">
+      <rect width="168" height="38" rx="19" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="18" y="24" fill="#dbe5f6" font-size="13" font-weight="600">2 buildings · NYC</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#141020"/>
+      <stop offset="1" stop-color="#1d1526"/>
+    </linearGradient>
+    <linearGradient id="warm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2994e"/>
+      <stop offset="1" stop-color="#ef7a72"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#f2994e" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#f2994e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+
+  <!-- steam -->
+  <g stroke="rgba(255,255,255,0.28)" stroke-width="6" stroke-linecap="round" fill="none">
+    <path d="M340 128c-12 22 12 34 0 56"/>
+    <path d="M400 108c-12 22 12 34 0 56"/>
+    <path d="M460 128c-12 22 12 34 0 56"/>
+  </g>
+
+  <!-- pan -->
+  <g transform="translate(400,290)">
+    <ellipse cx="0" cy="0" rx="190" ry="60" fill="#241a2e" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+    <ellipse cx="0" cy="-10" rx="170" ry="50" fill="#161020"/>
+    <ellipse cx="0" cy="-10" rx="120" ry="34" fill="url(#warm)" opacity="0.85"/>
+    <ellipse cx="-30" cy="-16" rx="46" ry="14" fill="rgba(255,255,255,0.25)"/>
+    <!-- handle -->
+    <rect x="182" y="-16" width="150" height="22" rx="11" fill="#241a2e" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+  </g>
+
+  <text x="400" y="440" fill="#e8dff0" font-size="26" font-weight="700" text-anchor="middle" letter-spacing="1">Cooking</text>
+  <text x="400" y="468" fill="rgba(232,223,240,0.55)" font-size="14" text-anchor="middle">meals · recipes · experiments</text>
+</svg>

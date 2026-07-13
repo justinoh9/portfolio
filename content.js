@@ -69,9 +69,10 @@ const siteContent = {
       {
         title: "Jason — AI WhatsApp Assistant",
         meta: "Alltramatic · 2025–2026",
+        featured: true,
         description:
           "An AI-powered WhatsApp assistant running in production for a NYC property management company, automating prospect lead capture, FAQ handling, viewing scheduling, and maintenance routing across two buildings. Containerized full-stack system — FastAPI/Python backend, PostgreSQL (SQLAlchemy), a Node.js WhatsApp bridge, and a React/Vite admin dashboard — with an agentic Claude tool-use loop (9+ tools) and human-in-the-loop escalation.",
-        image: "",
+        image: "assets/thumbs/jason.svg",
         tags: ["Python", "FastAPI", "PostgreSQL", "React", "Claude API", "Docker"],
         links: [
           { label: "Private — client work", url: "" }
@@ -82,7 +83,7 @@ const siteContent = {
         meta: "2026",
         description:
           "A full-stack airline reservation web app (PHP, MySQL, WAMP) with customer authentication, session-based login, flight search, and ticket purchasing. Designed a normalized relational schema across airlines, airports, airplanes, flights, tickets, customers, and staff, with SQL queries for availability, booking history, and staff reports.",
-        image: "",
+        image: "assets/thumbs/tickets.svg",
         tags: ["PHP", "MySQL", "SQL", "Full-Stack"],
         links: [
           { label: "Code", url: "https://github.com/justinoh9/Airplane-Ticket-Reservation-System" }
@@ -93,20 +94,24 @@ const siteContent = {
         meta: "2025",
         description:
           "A Python pipeline that trains a TF-IDF + Logistic Regression sentiment classifier on labeled review data (~88% cross-validated accuracy), then scores new e-commerce reviews into a report: sentiment breakdown, a health score, model-derived themes, a stars-vs-sentiment mismatch check, and suspicious-review flags. Ships as two CLIs with a test suite.",
-        image: "",
+        image: "assets/thumbs/ml-analyzer.svg",
         tags: ["Python", "scikit-learn", "NLP", "pandas"],
         links: [
           { label: "Code", url: "https://github.com/justinoh9/machine-learning-review-analyzer" }
         ]
       },
       {
-        title: "Solar-Powered Light-Tracking Umbrella",
-        meta: "2023–2024",
+        title: "Solarbrella — Light-Tracking Solar Umbrella",
+        meta: "Sep 2023 – Jan 2024",
         description:
-          "An Arduino-based light-tracking system in C++ using sensor input and servo control to orient a solar panel toward maximum light — measuring up to 25% higher output versus a fixed angle. Built the hardware end to end with Fusion 360, 3D printing, PCB design, sensors, servos, and power circuits under budget constraints.",
-        image: "",
+          "An Arduino-based light-tracking system in C++ using sensor input and servo control to orient dual solar panel arrays toward maximum light — measuring up to 25% higher output versus a fixed angle (16.9V from the hand-wired series array). Built the hardware end to end with Fusion 360, 3D printing, laser-cut mounts, sensors, servos, and power circuits under budget constraints.",
+        image: "assets/solarbrella/solarbrella-full.jpg",
         tags: ["Arduino", "C++", "Embedded", "Hardware"],
-        links: []
+        links: [
+          { label: "Servo mechanism", url: "assets/solarbrella/solarbrella-mechanism.jpg" },
+          { label: "Panel testing", url: "assets/solarbrella/solarbrella-testing.jpg" },
+          { label: "Panel arrays", url: "assets/solarbrella/solarbrella-panels.jpg" }
+        ]
       }
     ]
   },
@@ -167,7 +172,7 @@ const siteContent = {
         title: "Cooking",
         description:
           "Meals, recipes, and food I’ve made or enjoyed recently.",
-        image: "",
+        image: "assets/thumbs/cooking.svg",
         href: "cooking.html",
         tags: ["Food", "Recipes", "Personal"]
       },
@@ -175,7 +180,7 @@ const siteContent = {
         title: "Cars",
         description:
           "Cars I enjoy driving, thinking about, and working on.",
-        image: "",
+        image: "assets/thumbs/cars.svg",
         href: "cars.html",
         tags: ["Cars", "Mods", "Personal"]
       }

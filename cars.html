@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cars | Justin Oh</title>
   <meta name="description" content="A personal page featuring cars, mods, and notes from Justin Oh." />
+  <meta name="theme-color" content="#090b10" />
+  <link rel="canonical" href="https://justinoh9.github.io/portfolio/cars.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cars | Justin Oh" />
+  <meta property="og:description" content="Cars Justin enjoys driving, thinking about, and working on." />
+  <meta property="og:url" content="https://justinoh9.github.io/portfolio/cars.html" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237aa2ff'/%3E%3Cstop offset='1' stop-color='%239a7cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='43' font-family='Arial, sans-serif' font-size='27' font-weight='700' fill='white' text-anchor='middle'%3EJO%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #090b10;
@@ -26,7 +36,7 @@
 
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background:
         radial-gradient(circle at 10% 10%, rgba(122,162,255,0.16), transparent 28%),
@@ -98,6 +108,59 @@
       color: var(--text);
     }
 
+    nav { position: relative; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 42px;
+      height: 42px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+    }
+    .nav-toggle span {
+      display: block;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--text);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.6rem);
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding: 0.8rem;
+      border-radius: 22px;
+      border: 1px solid var(--card-border);
+      background: rgba(12,16,24,0.97);
+      box-shadow: var(--shadow);
+      z-index: 60;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .mobile-menu a:hover, .mobile-menu a:active {
+      color: var(--text);
+      background: rgba(122,162,255,0.12);
+    }
+
     .hero {
       padding: 3rem 0 2rem;
     }
@@ -135,6 +198,7 @@
 
     h1 {
       margin: 1rem 0 0.8rem;
+      font-family: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
       font-size: clamp(2.8rem, 6vw, 5.2rem);
       line-height: 0.95;
       letter-spacing: -0.05em;
@@ -193,6 +257,7 @@
 
     .section-head h2 {
       margin: 0;
+      font-family: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
       font-size: clamp(1.8rem, 4vw, 3rem);
       letter-spacing: -0.04em;
     }
@@ -241,17 +306,14 @@
     }
 
     .card-image.placeholder::after {
-      content: "Add image in content.js";
+      content: "🚗";
       position: absolute;
-      inset: auto 1rem 1rem 1rem;
-      display: inline-flex;
-      justify-content: center;
-      padding: 0.75rem 1rem;
-      border-radius: 14px;
-      background: rgba(9,11,16,0.62);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: #dbe5f6;
-      font-size: 0.9rem;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 3.2rem;
+      opacity: 0.6;
+      filter: saturate(0.8);
     }
 
     .card h3 {
@@ -329,6 +391,10 @@
         display: none;
       }
 
+      .nav-toggle {
+        display: flex;
+      }
+
       .hero-card,
       .card {
         padding: 1.1rem;
@@ -349,6 +415,14 @@
           <span id="brandName">Justin Oh</span>
         </a>
         <div class="nav-links">
+          <a href="index.html">Portfolio</a>
+          <a href="cooking.html">Cooking</a>
+          <a href="cars.html">Cars</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="mobile-menu" id="mobileMenu">
           <a href="index.html">Portfolio</a>
           <a href="cooking.html">Cooking</a>
           <a href="cars.html">Cars</a>
@@ -454,6 +528,13 @@
 
       renderItems(page.items || []);
       byId('year').textContent = new Date().getFullYear();
+
+      const toggle = byId('navToggle');
+      const menu = byId('mobileMenu');
+      toggle.addEventListener('click', () => {
+        const open = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
 
       const reveals = document.querySelectorAll('.reveal');
       const observer = new IntersectionObserver((entries) => {

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1320"/>
+      <stop offset="1" stop-color="#141a2b"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7aa2ff"/>
+      <stop offset="1" stop-color="#9a7cff"/>
+    </linearGradient>
+    <linearGradient id="barPos" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#2ba86d"/>
+      <stop offset="1" stop-color="#3fd08b"/>
+    </linearGradient>
+    <linearGradient id="barNeu" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#5a6b8c"/>
+      <stop offset="1" stop-color="#8ba0c4"/>
+    </linearGradient>
+    <linearGradient id="barNeg" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#c2504f"/>
+      <stop offset="1" stop-color="#ef7a72"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.15" cy="0.9" r="0.9">
+      <stop offset="0" stop-color="#7aa2ff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#7aa2ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+
+  <!-- terminal header -->
+  <g transform="translate(60,48)">
+    <rect width="680" height="404" rx="20" fill="rgba(10,14,24,0.85)" stroke="rgba(255,255,255,0.12)"/>
+    <circle cx="26" cy="26" r="6" fill="#ef7a72"/>
+    <circle cx="46" cy="26" r="6" fill="#f2c14e"/>
+    <circle cx="66" cy="26" r="6" fill="#3fd08b"/>
+    <text x="654" y="31" fill="#98a4b8" font-size="13" text-anchor="end" font-family="ui-monospace, monospace">review_analyzer --report</text>
+  </g>
+
+  <!-- accuracy gauge -->
+  <g transform="translate(120,140)">
+    <text x="0" y="0" fill="#98a4b8" font-size="12" letter-spacing="1.5" font-weight="600">CV ACCURACY</text>
+    <g transform="translate(70,86)">
+      <circle r="58" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"/>
+      <circle r="58" fill="none" stroke="url(#acc)" stroke-width="12" stroke-linecap="round"
+              stroke-dasharray="320.6 364.4" transform="rotate(-90)"/>
+      <text y="8" fill="#f4f7fb" font-size="30" font-weight="800" text-anchor="middle">88%</text>
+    </g>
+    <text x="70" y="176" fill="#98a4b8" font-size="12" text-anchor="middle">TF-IDF + LogReg</text>
+  </g>
+
+  <!-- sentiment bars -->
+  <g transform="translate(320,140)">
+    <text x="0" y="0" fill="#98a4b8" font-size="12" letter-spacing="1.5" font-weight="600">SENTIMENT BREAKDOWN</text>
+    <g transform="translate(0,20)">
+      <rect x="0" y="52" width="56" height="108" rx="8" fill="url(#barPos)"/>
+      <rect x="76" y="112" width="56" height="48" rx="8" fill="url(#barNeu)"/>
+      <rect x="152" y="132" width="56" height="28" rx="8" fill="url(#barNeg)"/>
+      <text x="28" y="180" fill="#98a4b8" font-size="12" text-anchor="middle">Pos</text>
+      <text x="104" y="180" fill="#98a4b8" font-size="12" text-anchor="middle">Neu</text>
+      <text x="180" y="180" fill="#98a4b8" font-size="12" text-anchor="middle">Neg</text>
+      <text x="28" y="42" fill="#bdf2d8" font-size="14" font-weight="700" text-anchor="middle">64%</text>
+      <text x="104" y="102" fill="#c6d4ec" font-size="14" font-weight="700" text-anchor="middle">22%</text>
+      <text x="180" y="122" fill="#f6c9c4" font-size="14" font-weight="700" text-anchor="middle">14%</text>
+    </g>
+  </g>
+
+  <!-- report lines -->
+  <g transform="translate(570,140)">
+    <text x="0" y="0" fill="#98a4b8" font-size="12" letter-spacing="1.5" font-weight="600">FLAGS</text>
+    <g transform="translate(0,22)">
+      <rect width="130" height="40" rx="12" fill="rgba(242,193,78,0.1)" stroke="rgba(242,193,78,0.4)"/>
+      <text x="14" y="25" fill="#f2d9a0" font-size="12" font-weight="600">★ mismatch ×12</text>
+    </g>
+    <g transform="translate(0,72)">
+      <rect width="130" height="40" rx="12" fill="rgba(239,122,114,0.1)" stroke="rgba(239,122,114,0.4)"/>
+      <text x="14" y="25" fill="#f6c9c4" font-size="12" font-weight="600">⚠ suspicious ×5</text>
+    </g>
+    <g transform="translate(0,122)">
+      <rect width="130" height="40" rx="12" fill="rgba(63,208,139,0.1)" stroke="rgba(63,208,139,0.4)"/>
+      <text x="14" y="25" fill="#bdf2d8" font-size="12" font-weight="600">✓ health 8.2/10</text>
+    </g>
+  </g>
+
+  <!-- theme chips -->
+  <g transform="translate(120,368)" font-size="12" font-weight="600">
+    <text x="0" y="-10" fill="#98a4b8" letter-spacing="1.5">MODEL-DERIVED THEMES</text>
+    <g transform="translate(0,4)">
+      <rect width="92" height="28" rx="14" fill="rgba(122,162,255,0.12)" stroke="rgba(122,162,255,0.35)"/>
+      <text x="46" y="18" fill="#bcd0f7" text-anchor="middle">shipping</text>
+    </g>
+    <g transform="translate(100,4)">
+      <rect width="82" height="28" rx="14" fill="rgba(122,162,255,0.12)" stroke="rgba(122,162,255,0.35)"/>
+      <text x="41" y="18" fill="#bcd0f7" text-anchor="middle">quality</text>
+    </g>
+    <g transform="translate(190,4)">
+      <rect width="66" height="28" rx="14" fill="rgba(122,162,255,0.12)" stroke="rgba(122,162,255,0.35)"/>
+      <text x="33" y="18" fill="#bcd0f7" text-anchor="middle">sizing</text>
+    </g>
+    <g transform="translate(264,4)">
+      <rect width="96" height="28" rx="14" fill="rgba(154,124,255,0.12)" stroke="rgba(154,124,255,0.35)"/>
+      <text x="48" y="18" fill="#cfc2f7" text-anchor="middle">returns</text>
+    </g>
+  </g>
+</svg>

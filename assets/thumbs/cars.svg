@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1420"/>
+      <stop offset="1" stop-color="#11202b"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3d6fd6"/>
+      <stop offset="1" stop-color="#2a4fa8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.85" r="0.8">
+      <stop offset="0" stop-color="#7aa2ff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#7aa2ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#glow)"/>
+
+  <!-- speed lines -->
+  <g stroke="rgba(122,162,255,0.35)" stroke-width="5" stroke-linecap="round">
+    <path d="M80 250h110"/>
+    <path d="M60 290h90"/>
+    <path d="M95 330h70"/>
+  </g>
+
+  <!-- car silhouette -->
+  <g transform="translate(230,190)">
+    <path d="M20 110 C 30 70, 70 42, 130 34 C 190 26, 260 26, 310 44 C 350 58, 380 76, 400 96 C 420 100, 436 108, 436 122 L 430 146 C 430 154, 422 158, 414 158 L 20 158 C 8 158, 0 150, 0 138 L 0 128 C0 118, 8 112, 20 110 Z" fill="url(#body)"/>
+    <path d="M140 44 C 190 37, 250 38, 292 52 C 310 60, 324 70, 334 82 L 150 82 C 140 70, 138 56, 140 44 Z" fill="#0d1420" opacity="0.85"/>
+    <!-- wheels -->
+    <g>
+      <circle cx="105" cy="158" r="42" fill="#0a0e16" stroke="rgba(255,255,255,0.25)" stroke-width="4"/>
+      <circle cx="105" cy="158" r="18" fill="none" stroke="rgba(122,162,255,0.7)" stroke-width="4"/>
+      <circle cx="330" cy="158" r="42" fill="#0a0e16" stroke="rgba(255,255,255,0.25)" stroke-width="4"/>
+      <circle cx="330" cy="158" r="18" fill="none" stroke="rgba(122,162,255,0.7)" stroke-width="4"/>
+    </g>
+    <!-- headlight -->
+    <rect x="408" y="112" width="24" height="10" rx="5" fill="#ffe9a8"/>
+  </g>
+
+  <text x="400" y="440" fill="#dfe8f5" font-size="26" font-weight="700" text-anchor="middle" letter-spacing="1">Cars</text>
+  <text x="400" y="468" fill="rgba(223,232,245,0.55)" font-size="14" text-anchor="middle">driving · mods · projects</text>
+</svg>
