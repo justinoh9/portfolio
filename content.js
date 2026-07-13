@@ -23,7 +23,7 @@ const siteContent = {
     portrait: {
       label: "Justin K. Oh",
       text: "Computer Engineering · NYU Tandon",
-      image: "assets/headshot.jpg"
+      image: "assets/headshot-conference.jpg"
     },
     sideCards: [
       {
