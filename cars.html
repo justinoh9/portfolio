@@ -270,9 +270,26 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1rem;
     }
+
+    /* Gallery cards */
+    .card { padding: 0; gap: 0; overflow: hidden; cursor: zoom-in; }
+    .card-photo-btn { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+    .card-photo { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.35s ease; }
+    .card:hover .card-photo { transform: scale(1.05); }
+    .card-caption { padding: 0.85rem 1rem 1rem; color: var(--muted); font-size: 0.95rem; }
+    .card-photo-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+    /* Lightbox */
+    .lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 2rem; background: rgba(6,8,12,0.92); backdrop-filter: blur(10px); }
+    .lightbox[hidden] { display: none; }
+    .lightbox-inner { margin: 0; max-width: min(1100px, 92vw); display: flex; flex-direction: column; gap: 0.8rem; }
+    .lightbox-inner img { max-width: 100%; max-height: 80vh; width: auto; margin: 0 auto; border-radius: 16px; box-shadow: var(--shadow); }
+    .lightbox-inner figcaption { text-align: center; color: #dbe5f6; font-size: 1rem; }
+    .lightbox-close { position: fixed; top: 1.2rem; right: 1.4rem; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.18); background: rgba(20,24,33,0.85); color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+    .lightbox-close:hover { border-color: rgba(122,162,255,0.5); }
 
     .card {
       display: grid;
@@ -466,6 +483,14 @@
     </div>
   </footer>
 
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <figure class="lightbox-inner">
+      <img id="lightboxImg" src="" alt="">
+      <figcaption id="lightboxCap"></figcaption>
+    </figure>
+  </div>
+
   <script src="content.js"></script>
   <script>
     const byId = (id) => document.getElementById(id);
@@ -479,37 +504,54 @@
         .join('');
     }
 
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+
     function renderItems(items) {
       const grid = byId('entriesGrid');
 
       if (!items || !items.length) {
         grid.innerHTML = `
           <div class="empty-state reveal">
-            No car entries yet. Add items to <strong>siteContent.cars.items</strong> in <strong>content.js</strong>.
+            No entries yet. Add items to <strong>siteContent.cars.items</strong> in <strong>content.js</strong>.
           </div>
         `;
         return;
       }
 
       grid.innerHTML = items.map((item) => {
-        const imageClass = item.image ? 'card-image' : 'card-image placeholder';
-        const imageStyle = item.image ? `style="background-image:url('${item.image}')"` : '';
-        const tags = (item.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
-        const extra = item.link && item.linkLabel
-          ? `<a class="card-link" href="${item.link}" ${item.link.startsWith('#') ? '' : 'target="_blank" rel="noreferrer"'}>${item.linkLabel}</a>`
-          : '';
-
+        const cap = item.caption || item.title || '';
+        const capHtml = cap ? `<figcaption class="card-caption">${esc(cap)}</figcaption>` : '';
         return `
-          <article class="card reveal">
-            <div class="${imageClass}" ${imageStyle}></div>
-            ${tags ? `<div class="tag-row">${tags}</div>` : ''}
-            <h3>${item.title || 'Untitled entry'}</h3>
-            <p>${item.description || ''}</p>
-            ${item.note ? `<p>${item.note}</p>` : ''}
-            ${extra}
-          </article>
+          <figure class="card reveal">
+            <button type="button" class="card-photo-btn" data-full="${esc(item.image)}" data-cap="${esc(cap)}" aria-label="View photo${cap ? ': ' + esc(cap) : ''}">
+              <img class="card-photo" src="${esc(item.image)}" loading="lazy" alt="${esc(cap || 'Photo')}">
+            </button>
+            ${capHtml}
+          </figure>
         `;
       }).join('');
+
+      grid.querySelectorAll('.card-photo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => openLightbox(btn.dataset.full, btn.dataset.cap));
+      });
+    }
+
+    function openLightbox(src, cap) {
+      byId('lightboxImg').src = src;
+      byId('lightboxImg').alt = cap || 'Photo';
+      const c = byId('lightboxCap');
+      c.textContent = cap || '';
+      c.style.display = cap ? '' : 'none';
+      byId('lightbox').hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      byId('lightbox').hidden = true;
+      byId('lightboxImg').src = '';
+      document.body.style.overflow = '';
     }
 
     function applyContent() {
@@ -534,6 +576,14 @@
       toggle.addEventListener('click', () => {
         const open = menu.classList.toggle('open');
         toggle.setAttribute('aria-expanded', String(open));
+      });
+
+      byId('lightboxClose').addEventListener('click', closeLightbox);
+      byId('lightbox').addEventListener('click', (e) => {
+        if (e.target === byId('lightbox')) closeLightbox();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !byId('lightbox').hidden) closeLightbox();
       });
 
       const reveals = document.querySelectorAll('.reveal');

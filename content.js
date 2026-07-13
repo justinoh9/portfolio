@@ -226,21 +226,18 @@ const siteContent = {
     pageTitle: "Cooking",
     intro: "Meals, recipes, and food I’ve made or enjoyed recently.",
     sectionTitle: "Recent Meals",
-    sectionNote: "A more personal side of the site.",
+    sectionNote: "Food I’ve cooked or enjoyed — captions coming soon.",
     items: [
-      {
-        title: "Steak Rice Bowl",
-        image: "",
-        description: "Simple, filling, and one of my favorite meals to make.",
-        note: "High protein and easy to make consistently.",
-        tags: ["Homemade", "High Protein"]
-      },
-      {
-        title: "Pasta Night",
-        image: "",
-        description: "A meal I liked enough to want to document here.",
-        tags: ["Comfort Food"]
-      }
+      { image: "assets/gallery/food/IMG_7602.jpg", caption: "Crispy-skin salmon with broccoli — one of my go-to high-protein dinners." },
+      { image: "assets/gallery/food/IMG_6765.jpg", caption: "Thin-sliced beef hitting the pan for a rice bowl." },
+      { image: "assets/gallery/food/IMG_7969.jpg", caption: "Homemade fried rice, egg and scallions, finished with a sauce drizzle." },
+      { image: "assets/gallery/food/IMG_8374.jpg", caption: "Pho night — always worth the effort." },
+      { image: "assets/gallery/food/IMG_9363.jpg", caption: "Creamy tomato penne with plenty of parmesan." },
+      { image: "assets/gallery/food/IMG_7323.jpg", caption: "Penne with parm and herbs, kept it simple." },
+      { image: "assets/gallery/food/IMG_7957.jpg", caption: "Shrimp and green bean pasta." },
+      { image: "assets/gallery/food/IMG_7004.jpg", caption: "Big square pepperoni pizza." },
+      { image: "assets/gallery/food/IMG_7499.jpg", caption: "Fresh dragon fruit — as good to look at as it is to eat." },
+      { image: "assets/gallery/food/IMG_6082.jpg", caption: "Drinks with the crew." },
     ]
   },
 
@@ -248,16 +245,34 @@ const siteContent = {
     eyebrow: "Personal Page",
     pageTitle: "Cars",
     intro: "Cars I enjoy driving, thinking about, and working on.",
-    sectionTitle: "Cars & Notes",
-    sectionNote: "A personal page for cars, mods, and things I find interesting.",
+    sectionTitle: "Cars & Mods",
+    sectionNote: "My BMW and the mods and maintenance I’ve done — captions coming soon.",
     items: [
-      {
-        title: "2019 BMW 330i xDrive",
-        image: "",
-        description: "The car that got me into how small changes — sound, suspension, tuning — shape the whole driving experience.",
-        note: "Daily driver and an ongoing project I enjoy tinkering with.",
-        tags: ["BMW", "Personal Car", "Mods"]
-      }
+      { image: "assets/gallery/cars/IMG_6251.jpg", caption: "My BMW 3-series — the car that started the whole project." },
+      { image: "assets/gallery/cars/IMG_9192.jpg", caption: "Hood up, drain pan underneath — oil change day." },
+      { image: "assets/gallery/cars/IMG_9202.jpg", caption: "Up on jack stands and ready to get underneath." },
+      { image: "assets/gallery/cars/IMG_6457.jpg", caption: "Ambient lighting set to purple." },
+      { image: "assets/gallery/cars/IMG_6343.jpg", caption: "Same cabin, teal mood." },
+      { image: "assets/gallery/cars/IMG_6342.jpg", caption: "Center console apart — mid interior job." },
+      { image: "assets/gallery/cars/IMG_6277.jpg", caption: "Door panel off, working on the interior." },
+      { image: "assets/gallery/cars/IMG_7920.jpg", caption: "Gloss-black mirror caps on." },
+      { image: "assets/gallery/cars/IMG_7914.jpg", caption: "Before shot — factory mirror." },
+      { image: "assets/gallery/cars/IMG_8142.jpg", caption: "Test-fitting the rear trunk lip." },
+      { image: "assets/gallery/cars/IMG_7981.jpg", caption: "Cold air intake going in." },
+      { image: "assets/gallery/cars/IMG_6254.jpg", caption: "Under the hood." },
+      { image: "assets/gallery/cars/IMG_6721.jpg", caption: "Fresh oil filter before it goes in." },
+      { image: "assets/gallery/cars/IMG_9210.jpg", caption: "Oil pan pulled and ready to swap." },
+      { image: "assets/gallery/cars/IMG_9209.jpg", caption: "View from underneath." },
+      { image: "assets/gallery/cars/IMG_9207.jpg", caption: "Poking around the underbody." },
+      { image: "assets/gallery/cars/IMG_7419.jpg", caption: "Exhaust work — chasing a better note." },
+      { image: "assets/gallery/cars/IMG_7573.jpg", caption: "Wheel and tire up close." },
+      { image: "assets/gallery/cars/IMG_7450.jpg", caption: "Front end, tools out on the garage floor." },
+      { image: "assets/gallery/cars/IMG_7714.jpg", caption: "Garage setup for the day." },
+      { image: "assets/gallery/cars/IMG_7974.jpg", caption: "New parts, freshly unboxed." },
+      { image: "assets/gallery/cars/IMG_9216.jpg", caption: "Typical wrenching session in the garage." },
+      { image: "assets/gallery/cars/IMG_6173.jpg", caption: "Interior trim and speaker detail." },
+      { image: "assets/gallery/cars/IMG_6201.jpg", caption: "Close-up on the door trim." },
+      { image: "assets/gallery/cars/IMG_6202.jpg", caption: "Speaker grille and leather up close." },
     ]
   }
 };
