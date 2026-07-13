@@ -226,19 +226,19 @@ const siteContent = {
     pageTitle: "Cooking",
     intro: "Meals, recipes, and food I’ve made or enjoyed recently.",
     sectionTitle: "Recent Meals",
-    sectionNote: "Food I’ve cooked or enjoyed — captions coming soon.",
+    sectionNote: "Food I’ve cooked at home, plus a few favorites I go out for.",
     items: [
-      { image: "assets/gallery/food/IMG_7602.jpg", caption: "Crispy-skin salmon with broccoli — one of my go-to high-protein dinners." },
-      { image: "assets/gallery/food/IMG_6765.jpg", caption: "Thin-sliced beef hitting the pan for a rice bowl." },
-      { image: "assets/gallery/food/IMG_7969.jpg", caption: "Homemade fried rice, egg and scallions, finished with a sauce drizzle." },
-      { image: "assets/gallery/food/IMG_8374.jpg", caption: "Pho night — always worth the effort." },
+      { image: "assets/gallery/food/IMG_7602.jpg", caption: "Using a stainless steel pan, I cooked salmon with crispy skin, as well as some blanched broccoli over a pan sauce." },
+      { image: "assets/gallery/food/IMG_6765.jpg", caption: "Enoki mushrooms with beef slices, later added a sweet soy sauce glaze." },
+      { image: "assets/gallery/food/IMG_7969.jpg", caption: "Fried rice, egg and scallions, finished with an oyster sauce drizzle. Tried to be artistic." },
       { image: "assets/gallery/food/IMG_9363.jpg", caption: "Creamy tomato penne with plenty of parmesan." },
       { image: "assets/gallery/food/IMG_7323.jpg", caption: "Penne with parm and herbs, kept it simple." },
-      { image: "assets/gallery/food/IMG_7957.jpg", caption: "Shrimp and green bean pasta." },
-      { image: "assets/gallery/food/IMG_7004.jpg", caption: "Big square pepperoni pizza." },
-      { image: "assets/gallery/food/IMG_7499.jpg", caption: "Fresh dragon fruit — as good to look at as it is to eat." },
-      { image: "assets/gallery/food/IMG_6082.jpg", caption: "Drinks with the crew." },
-    ]
+      { image: "assets/gallery/food/IMG_7957.jpg", caption: "Simple butter noodles and shrimp." },
+      { image: "assets/gallery/food/IMG_8374.jpg", caption: "My favorite food, Pho. Really time consuming to make so I usually go out and buy it." },
+      { image: "assets/gallery/food/IMG_7004.jpg", caption: "Went to a local pizza place with friends and ordered a hot honey pizza." },
+      { image: "assets/gallery/food/IMG_7499.jpg", caption: "Really nice looking dragon fruit, but didn't taste sweet :(" },
+      { image: "assets/gallery/food/IMG_6082.jpg", caption: "Caffeine for getting work done." },
+        ]
   },
 
   cars: {
