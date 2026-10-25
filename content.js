@@ -12,8 +12,8 @@ const siteContent = {
       href: "#projects"
     },
     secondaryCta: {
-      label: "Download Résumé",
-      href: "assets/Justin-Oh-Resume.pdf"
+      label: "Get In Touch",
+      href: "#contact"
     },
     meta: [
       { label: "Focus", value: "Software · Full-Stack · Embedded" },
@@ -231,7 +231,7 @@ const siteContent = {
       copy:
         "Computer engineering student at NYU Tandon (graduating December 2027), looking for internships in software, embedded systems, firmware, or computer hardware.",
       buttonLabel: "Download Résumé",
-      buttonUrl: "assets/Justin-Oh-Resume.pdf"
+      buttonUrl: ""
     }
   },
 

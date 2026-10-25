@@ -1422,8 +1422,13 @@
       byId('availabilityEyebrow').textContent = siteContent.contact.availability.eyebrow;
       byId('availabilityHeadline').textContent = siteContent.contact.availability.headline;
       byId('availabilityCopy').textContent = siteContent.contact.availability.copy;
-      byId('resumeButton').textContent = siteContent.contact.availability.buttonLabel;
-      byId('resumeButton').href = siteContent.contact.availability.buttonUrl;
+      // No buttonUrl = no resume to offer; drop the button rather than link nowhere.
+      if (siteContent.contact.availability.buttonUrl) {
+        byId('resumeButton').textContent = siteContent.contact.availability.buttonLabel;
+        byId('resumeButton').href = siteContent.contact.availability.buttonUrl;
+      } else {
+        byId('resumeButton').remove();
+      }
 
       byId('year').textContent = new Date().getFullYear();
 
@@ -1562,7 +1567,6 @@
           '<div class="container" style="padding:4rem 0;text-align:center;color:var(--muted)">' +
           '<h1 style="font-size:2rem">Justin Oh</h1>' +
           '<p>Having trouble loading? Try a hard refresh (Ctrl/Cmd + Shift + R).</p>' +
-          '<p><a class="btn btn-primary" href="assets/Justin-Oh-Resume.pdf" target="_blank" rel="noreferrer">Download Résumé</a></p>' +
           '</div>');
       }
     }
