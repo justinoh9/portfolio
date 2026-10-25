@@ -42,7 +42,7 @@ const siteContent = {
   about: {
     title: "Who I Am",
     paragraphs: [
-      "I’m a computer engineering student at NYU Tandon (B.S., expected May 2027) who likes turning ideas into real, working systems — from an agentic AI assistant handling live customer conversations to a co-founded e-commerce store with real revenue.",
+      "I’m a computer engineering student at NYU Tandon (B.S., expected December 2027) who likes turning ideas into real, working systems — from an agentic AI assistant handling live customer conversations to a co-founded e-commerce store with real revenue.",
       "My work spans full-stack development (FastAPI, React, Node.js, PostgreSQL), automation, AI/LLM evaluation, databases, and embedded systems in C/C++. I care about clean engineering and shipping things people actually use."
     ],
     skillsTitle: "Skills",
@@ -135,7 +135,7 @@ const siteContent = {
       "Where I’ve worked and what I’ve shipped.",
     items: [
       {
-        date: "2023 — May 2027",
+        date: "2023 — Dec 2027",
         role: "B.S. Computer Engineering",
         company: "New York University, Tandon School of Engineering",
         location: "Brooklyn, NY",
@@ -229,7 +229,7 @@ const siteContent = {
       eyebrow: "Open to internships",
       headline: "Seeking software, embedded & firmware internships.",
       copy:
-        "Computer engineering student at NYU Tandon (graduating May 2027), looking for internships in software, embedded systems, firmware, or computer hardware.",
+        "Computer engineering student at NYU Tandon (graduating December 2027), looking for internships in software, embedded systems, firmware, or computer hardware.",
       buttonLabel: "Download Résumé",
       buttonUrl: "assets/Justin-Oh-Resume.pdf"
     }
