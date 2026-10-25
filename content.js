@@ -79,6 +79,20 @@ const siteContent = {
         ]
       },
       {
+        title: "Jelli — Social Music Rating App",
+        meta: "2026 · with Eddie Guan",
+        featured: true,
+        description:
+          "A social music-rating app — Letterboxd for albums — live at myjelli.site, with one codebase building for iOS, Android, and web. Rating an album 1–10 cold is hard and the numbers drift, so Jelli never asks for a score in isolation: a rough rating is placed precisely by head-to-head comparisons against albums you've already ranked. Built on Expo/React Native and TypeScript over Supabase (Postgres with row-level security, PostgREST) and no custom server — rules that can't be client-enforced live in SQL as policies and security-definer functions. The music catalog composes several keyless APIs (iTunes, Last.fm, Deezer) behind swappable interfaces, so no single vendor is load-bearing.",
+        image: "assets/thumbs/jelli.svg",
+        tags: ["React Native", "TypeScript", "Expo", "Supabase", "PostgreSQL", "RLS"],
+        links: [
+          { label: "Live site", url: "https://myjelli.site" },
+          { label: "Case study", url: "https://github.com/justinoh9/heard-app/blob/main/CASE_STUDY.md" },
+          { label: "Code", url: "https://github.com/justinoh9/heard-app" }
+        ]
+      },
+      {
         title: "Air Ticket Reservation System",
         meta: "2026",
         description:
