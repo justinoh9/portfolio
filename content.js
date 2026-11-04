@@ -1,238 +1,198 @@
 const siteContent = {
   name: "Justin Oh",
-  brandMark: "JO",
 
+  // Hero "desktop" windows. Positions and sizes live in styles.css (.w-*).
   hero: {
-    eyebrow: "Computer Engineering @ NYU Tandon · Class of 2027",
-    title: "I build software, automation, and systems that ship.",
-    subtitle:
-      "I’m Justin Oh, a computer engineering student at NYU Tandon. I’ve built an AI-powered operations assistant running in production, co-founded an e-commerce business, and worked across full-stack development, databases, and embedded systems. I’m looking for software, embedded, or firmware engineering internships.",
-    primaryCta: {
-      label: "View Projects",
-      href: "#projects"
+    about: {
+      title: "Hey, I’m Justin.",
+      paragraphs: [
+        "I study computer engineering at NYU Tandon. Lately I’ve been building AI tools, web apps, and the occasional piece of hardware."
+      ]
     },
-    secondaryCta: {
-      label: "Get In Touch",
-      href: "#contact"
-    },
-    meta: [
-      { label: "Focus", value: "Software · Full-Stack · Embedded" },
-      { label: "Education", value: "NYU Tandon ’27" },
-      { label: "Seeking", value: "SWE / Embedded internships" }
+    photos: [
+      { key: "portrait", file: "justin.jpg", image: "assets/headshot-career-fair.jpg", alt: "Justin Oh in a suit at a career fair" },
+      { key: "solar", file: "solarbrella.jpg", href: "#solarbrella", image: "assets/solarbrella/solarbrella-full.jpg", alt: "Open the Solarbrella project: a prototype with two tilting solar panel arrays" },
+      { key: "jelli", file: "jelli.app", href: "#jelli", image: "assets/work/jelli-demo.png", alt: "Open the Jelli project: a head-to-head album comparison beside a ranked list" },
+      { key: "air", file: "northline.app", href: "#air-tickets", image: "assets/work/airline-demo.png", alt: "Open the airline reservation project: its flight search with live SQL queries" }
     ],
-    portrait: {
-      label: "Justin K. Oh",
-      text: "Computer Engineering · NYU Tandon",
-      image: "assets/headshot-conference.jpg"
-    },
-    sideCards: [
-      {
-        label: "Currently",
-        title: "Software Dev @ Alltramatic",
-        text: "Built “Jason,” an AI WhatsApp assistant running in production for a NYC property manager."
-      },
-      {
-        label: "Co-Founder",
-        title: "Coravii — DTC e-commerce",
-        text: "$50K+ in revenue and 3,000+ monthly visitors on a store I built and run."
-      }
+    // Faint, tinted photos behind the hero windows. Decorative only.
+    background: ["assets/personal/canyon.jpg", "assets/personal/garden.jpg", "assets/personal/lake.jpg"],
+    terminal: [
+      { cmd: "whoami", out: "justin oh, computer engineering @ nyu tandon" },
+      { cmd: "ls ~/work", out: "ai-assistant/  jelli/  solarbrella/  air-tickets/  review-analyzer/" },
+      { cmd: "cat status", out: "open to software internships, and hardware roles too" }
     ]
   },
 
-  about: {
-    title: "Who I Am",
-    paragraphs: [
-      "I’m a computer engineering student at NYU Tandon (B.S., expected December 2027) who likes turning ideas into real, working systems — from an agentic AI assistant handling live customer conversations to a co-founded e-commerce store with real revenue.",
-      "My work spans full-stack development (FastAPI, React, Node.js, PostgreSQL), automation, AI/LLM evaluation, databases, and embedded systems in C/C++. I care about clean engineering and shipping things people actually use."
-    ],
-    skillsTitle: "Skills",
-    skillGroups: [
-      {
-        label: "Languages",
-        items: ["Python", "C", "C++", "SQL", "JavaScript", "Verilog", "HTML/CSS", "x86 Assembly"]
-      },
-      {
-        label: "Frameworks & Tools",
-        items: ["FastAPI", "React", "Node.js", "PostgreSQL", "MySQL", "Git", "Linux", "Docker", "Vivado"]
-      },
-      {
-        label: "Focus Areas",
-        items: ["Full-Stack", "AI / LLM Evaluation", "Automation", "Databases", "Computer Architecture", "Robot Vision"]
-      }
-    ]
-  },
-
-  projects: {
-    sectionNote:
-      "A few things I’ve designed, built, and shipped — from production AI to embedded hardware.",
-    items: [
-      {
-        title: "Jason — AI WhatsApp Assistant",
-        meta: "Alltramatic · 2025–2026",
-        featured: true,
-        description:
-          "An AI-powered WhatsApp assistant running in production for a NYC property management company, automating prospect lead capture, FAQ handling, viewing scheduling, and maintenance routing across two buildings. Containerized full-stack system — FastAPI/Python backend, PostgreSQL (SQLAlchemy), a Node.js WhatsApp bridge, and a React/Vite admin dashboard — with an agentic Claude tool-use loop (9+ tools) and human-in-the-loop escalation.",
-        image: "assets/thumbs/jason.svg",
-        tags: ["Python", "FastAPI", "PostgreSQL", "React", "Claude API", "Docker"],
-        links: [
-          { label: "Private — client work", url: "" }
-        ]
-      },
-      {
-        title: "Jelli — Social Music Rating App",
-        meta: "2026 · with Eddie Guan",
-        featured: true,
-        description:
-          "A social music-rating app — Letterboxd for albums — live at myjelli.site, with one codebase building for iOS, Android, and web. Rating an album 1–10 cold is hard and the numbers drift, so Jelli never asks for a score in isolation: a rough rating is placed precisely by head-to-head comparisons against albums you've already ranked. Built on Expo/React Native and TypeScript over Supabase (Postgres with row-level security, PostgREST) and no custom server — rules that can't be client-enforced live in SQL as policies and security-definer functions. The music catalog composes several keyless APIs (iTunes, Last.fm, Deezer) behind swappable interfaces, so no single vendor is load-bearing.",
-        image: "assets/thumbs/jelli.svg",
-        tags: ["React Native", "TypeScript", "Expo", "Supabase", "PostgreSQL", "RLS"],
-        links: [
-          { label: "Live site", url: "https://myjelli.site" },
-          { label: "Case study", url: "https://github.com/justinoh9/heard-app/blob/main/CASE_STUDY.md" },
-          { label: "Code", url: "https://github.com/justinoh9/heard-app" }
-        ]
-      },
-      {
-        title: "Air Ticket Reservation System",
-        meta: "2026",
-        description:
-          "A full-stack airline reservation web app (PHP, MySQL, WAMP) with customer authentication, session-based login, flight search, and ticket purchasing. Designed a normalized relational schema across airlines, airports, airplanes, flights, tickets, customers, and staff, with SQL queries for availability, booking history, and staff reports.",
-        image: "assets/thumbs/tickets.svg",
-        tags: ["PHP", "MySQL", "SQL", "Full-Stack"],
-        links: [
-          { label: "Code", url: "https://github.com/justinoh9/Airplane-Ticket-Reservation-System" }
-        ]
-      },
-      {
-        title: "Machine Learning Review Analyzer",
-        meta: "2025",
-        description:
-          "A Python pipeline that trains a TF-IDF + Logistic Regression sentiment classifier on labeled review data (~88% cross-validated accuracy), then scores new e-commerce reviews into a report: sentiment breakdown, a health score, model-derived themes, a stars-vs-sentiment mismatch check, and suspicious-review flags. Ships as two CLIs with a test suite.",
-        image: "assets/thumbs/ml-analyzer.svg",
-        tags: ["Python", "scikit-learn", "NLP", "pandas"],
-        links: [
-          { label: "Code", url: "https://github.com/justinoh9/machine-learning-review-analyzer" }
-        ]
-      },
-      {
-        title: "Solarbrella — Light-Tracking Solar Umbrella",
-        meta: "Sep 2023 – Jan 2024",
-        description:
-          "An Arduino-based light-tracking system in C++ using sensor input and servo control to orient dual solar panel arrays toward maximum light — measuring up to 25% higher output versus a fixed angle (16.9V from the hand-wired series array). Built the hardware end to end with Fusion 360, 3D printing, laser-cut mounts, sensors, servos, and power circuits under budget constraints.",
-        image: "assets/solarbrella/solarbrella-full.jpg",
-        tags: ["Arduino", "C++", "Embedded", "Hardware"],
-        links: [
-          { label: "Servo mechanism", url: "assets/solarbrella/solarbrella-mechanism.jpg" },
-          { label: "Panel testing", url: "assets/solarbrella/solarbrella-testing.jpg" },
-          { label: "Panel arrays", url: "assets/solarbrella/solarbrella-panels.jpg" }
-        ]
-      }
-    ]
+  intro: {
+    status: "Open to internships. Graduating December 2027."
   },
 
   experience: {
-    sectionNote:
-      "Where I’ve worked and what I’ve shipped.",
     items: [
       {
-        date: "2023 — Dec 2027",
-        role: "B.S. Computer Engineering",
-        company: "New York University, Tandon School of Engineering",
-        location: "Brooklyn, NY",
-        bullets: [
-          "Relevant coursework: Data Structures & Algorithms, Computer Architecture, Databases, Digital Logic, Electronics, Robot Vision, Linear Algebra."
-        ]
-      },
-      {
-        date: "Sep 2025 — May 2026",
-        role: "Software Developer / Operations Automation",
-        company: "Alltramatic",
-        location: "New York, NY",
-        bullets: [
-          "Built “Jason,” an AI-powered WhatsApp assistant for a NYC property management company — automating lead capture, FAQ handling, viewing scheduling, and maintenance routing across two residential buildings.",
-          "Architected a containerized full-stack system: FastAPI/Python backend, PostgreSQL (SQLAlchemy), a Node.js WhatsApp bridge, and a React/Vite admin dashboard, orchestrated with Docker Compose behind an HTTPS reverse proxy.",
-          "Implemented an agentic LLM tool-use loop (Anthropic Claude API) with 9+ tools and human-in-the-loop escalation, plus scheduled outbound automation and a lead-funnel analytics dashboard."
-        ]
-      },
-      {
-        date: "Feb 2026 — Present",
-        role: "AI Model Evaluation Fellow",
+        year: "2026",
         company: "Handshake AI Fellowship",
-        location: "Remote",
+        role: "AI Model Evaluation Fellow",
+        dates: "Feb 2026 – Present · Remote",
         bullets: [
-          "Evaluate large language model outputs for reasoning quality, factual accuracy, instruction-following, and safety across structured assessment tasks.",
-          "Analyze prompt–response pairs to identify hallucinations, incomplete reasoning, and failure modes, providing detailed written feedback for model improvement."
+          "Evaluate LLM responses for reasoning, accuracy, following instructions, and safety.",
+          "Write up where responses go wrong, like hallucinations or incomplete reasoning, as feedback for improving the models."
         ]
       },
       {
-        date: "May 2025 — Present",
-        role: "Co-Founder / Developer",
-        company: "Coravii",
-        location: "New York, NY",
+        year: "2025",
+        company: "Alltramatic",
+        role: "Software Developer / Operations Automation",
+        dates: "Sep 2025 – May 2026 · New York, NY",
         bullets: [
-          "Co-founded and built a direct-to-consumer e-commerce store (Shopify, HTML/CSS, JavaScript) supporting 3,000+ monthly visitors and $50,000+ in revenue.",
-          "Manage product pages, analytics, checkout optimization, and live customer-facing updates across active traffic."
+          "Built a WhatsApp assistant for a property-management company. It captures leads, answers common questions, schedules viewings, and routes maintenance requests.",
+          "The backend is FastAPI and PostgreSQL (SQLAlchemy), with a Node.js bridge to WhatsApp and a React/Vite admin dashboard, all running in Docker Compose behind an HTTPS reverse proxy.",
+          "The assistant runs on a Claude tool-use loop and hands off to a person when it’s unsure. I also built scheduled outbound messages and a dashboard for tracking the lead funnel."
+        ]
+      },
+      {
+        year: "2023",
+        company: "NYU Tandon",
+        role: "B.S. Computer Engineering",
+        dates: "2023 – Dec 2027 · Brooklyn, NY",
+        bullets: [
+          "Coursework: Data Structures & Algorithms, Computer Architecture, Databases, Digital Logic, Electronics, Robot Vision, Linear Algebra."
         ]
       }
     ]
   },
 
+  // column: which side of the staggered grid. order: position on phones (one column).
+  projects: [
+    {
+      slug: "ai-assistant",
+      demo: { url: "demos/assistant/", label: "Watch the replay", badge: "Interactive replay" },
+      title: "WhatsApp assistant for a leasing team",
+      label: "Client work (2025–26)",
+      column: 1,
+      order: 1,
+      art: "image",
+      image: "assets/work/assistant-demo.png",
+      alt: "The assistant replay: a WhatsApp chat, the agent's tool calls, and a team dashboard side by side",
+      ratio: "4 / 3",
+      description:
+        "A WhatsApp assistant running in production for a property-management company. It captures leads, answers common questions, schedules viewings, and routes maintenance requests. The Python backend (FastAPI, PostgreSQL) runs a Claude tool-use loop, with a Node.js bridge to WhatsApp and a React/Vite admin dashboard. Anything it isn’t sure about goes to a person.",
+      tags: ["Python", "FastAPI", "PostgreSQL", "React", "Claude API", "Docker"],
+      links: [],
+      note: "This is private client work, so the code isn’t public."
+    },
+    {
+      slug: "jelli",
+      demo: { url: "demos/jelli/", label: "Try the ranking engine", badge: "Interactive demo" },
+      title: "Letterboxd for albums",
+      label: "Jelli, with Eddie Guan (2026)",
+      column: 2,
+      order: 2,
+      art: "image",
+      image: "assets/work/jelli-demo.png",
+      alt: "A head-to-head album comparison beside a ranked list, from the Jelli ranking demo",
+      ratio: "1200 / 630",
+      description:
+        "A music-rating app, basically Letterboxd for albums, that builds for iOS, Android, and web from one codebase. Picking a score out of 10 from nothing is hard, so you give a rough score and then compare the album against ones you’ve already ranked until it finds its spot. It’s Expo/React Native and TypeScript on Supabase, with no custom server. Rules the client can’t be trusted with are enforced in Postgres through row-level security and security-definer functions. Music data comes from iTunes, Last.fm, and Deezer behind swappable interfaces, which we moved to after Spotify’s API limits got in the way.",
+      tags: ["React Native", "TypeScript", "Expo", "Supabase", "PostgreSQL", "RLS"],
+      links: [
+        { label: "Case study", url: "https://github.com/justinoh9/heard-app/blob/main/CASE_STUDY.md" },
+        { label: "Code", url: "https://github.com/justinoh9/heard-app" }
+      ]
+    },
+    {
+      slug: "solarbrella",
+      demo: { url: "demos/solarbrella/", label: "Try the simulation", badge: "Interactive demo" },
+      title: "Solar umbrella that tracks the light",
+      label: "Solarbrella (2023–24)",
+      column: 2,
+      order: 3,
+      art: "image",
+      image: "assets/solarbrella/solarbrella-full.jpg",
+      alt: "The Solarbrella prototype, with two tilting solar panel arrays above a canopy",
+      ratio: "4 / 5",
+      position: "48% 12%",
+      description:
+        "An umbrella with two arrays of solar panels that tilt toward the light. An Arduino running C++ reads the sensors and drives the servos. It produced up to 25% more than a fixed angle, and the hand-wired series array reached 16.9V. The mechanism was designed in Fusion 360, then 3D printed and laser cut, all on a small budget.",
+      tags: ["Arduino", "C++", "Embedded", "Hardware"],
+      links: [
+        { label: "Servo mechanism", url: "assets/solarbrella/solarbrella-mechanism.jpg" },
+        { label: "Panel testing", url: "assets/solarbrella/solarbrella-testing.jpg" },
+        { label: "Panel arrays", url: "assets/solarbrella/solarbrella-panels.jpg" }
+      ]
+    },
+    {
+      slug: "air-tickets",
+      demo: { url: "demos/airline/", label: "Try the live demo", badge: "Live demo" },
+      title: "Airline reservation system",
+      label: "Air tickets (2026)",
+      column: 1,
+      order: 4,
+      art: "image",
+      image: "assets/work/airline-demo.png",
+      alt: "The airline reservation demo: flight search results beside a panel of live SQL queries",
+      ratio: "8 / 5",
+      description:
+        "An airline booking site in PHP and MySQL, with customer logins, flight search, ticket purchases, and tools for airline staff. The normalized schema covers airlines, airports, airplanes, flights, tickets, customers, and staff, with SQL queries for availability, booking history, and staff reports.",
+      tags: ["PHP", "MySQL", "SQL", "Full-Stack"],
+      links: [
+        { label: "Code", url: "https://github.com/justinoh9/Airplane-Ticket-Reservation-System" }
+      ]
+    },
+    {
+      slug: "review-analyzer",
+      demo: { url: "demos/reviews/", label: "Try the live model", badge: "Live demo" },
+      title: "Sentiment analysis for product reviews",
+      label: "Review analyzer (2025)",
+      column: 1,
+      order: 5,
+      art: "image",
+      image: "assets/work/reviews-demo.png",
+      alt: "The review analyzer: one scored review with the words that drove it, beside a batch report",
+      ratio: "2 / 1",
+      description:
+        "A Python pipeline that trains a TF-IDF and logistic regression classifier on a small labeled set of 136 reviews. It scored 88% on the held-out test split and about 85% in cross-validation. Give it new reviews and it reports the sentiment split, a health score, common themes, places where the stars and the text disagree, and reviews that look suspicious. It comes with two command-line tools and a test suite.",
+      tags: ["Python", "scikit-learn", "NLP", "pandas"],
+      links: [
+        { label: "Code", url: "https://github.com/justinoh9/machine-learning-review-analyzer" }
+      ]
+    }
+  ],
+
+  // A small section near the bottom. The projects stay the focus.
   personal: {
-    sectionTitle: "Beyond Engineering",
-    sectionNote:
-      "A more personal side — things I genuinely enjoy outside of school and work.",
-    pages: [
-      {
-        title: "Cooking",
-        description:
-          "Meals, recipes, and food I’ve made or enjoyed recently.",
-        image: "assets/thumbs/cooking.svg",
-        href: "cooking.html",
-        tags: ["Food", "Recipes", "Personal"]
-      },
-      {
-        title: "Cars",
-        description:
-          "Cars I enjoy driving, thinking about, and working on.",
-        image: "assets/thumbs/cars.svg",
-        href: "cars.html",
-        tags: ["Cars", "Mods", "Personal"]
-      }
+    label: "Off the clock",
+    copy: "I like getting outside, cooking, and working on my car.",
+    links: [
+      { label: "Cooking", href: "cooking.html" },
+      { label: "Cars", href: "cars.html" }
+    ],
+    photos: [
+      { image: "assets/personal/canyon.jpg", alt: "Justin sitting on a rock above a river canyon" },
+      { image: "assets/personal/garden.jpg", alt: "Justin walking through a garden of sculpted trees" },
+      { image: "assets/personal/lake.jpg", alt: "Justin on a boat on a lake, with a dam behind him" }
+    ]
+  },
+
+  skills: {
+    label: "Toolbox",
+    groups: [
+      { label: "Languages", items: "Python, C, C++, SQL, JavaScript, Verilog, HTML/CSS, x86 Assembly" },
+      { label: "Frameworks + tools", items: "FastAPI, React, Node.js, PostgreSQL, MySQL, Git, Linux, Docker, Vivado" },
+      { label: "Focus areas", items: "Full-stack, AI / LLM evaluation, automation, databases, computer architecture, robot vision" }
     ]
   },
 
   contact: {
-    title: "Let’s build something.",
-    copy:
-      "I’m always glad to talk about engineering, internships, or interesting problems — reach out through any of these.",
+    title: "Say hi!",
+    copy: "I’m mostly looking for software internships, but I’m open to hardware engineering roles too! If you’re hiring or just want to talk about a project, reach out.",
+    resumeUrl: "",
     items: [
-      {
-        label: "Email",
-        value: "justinoh@nyu.edu",
-        action: "Email",
-        url: "mailto:justinoh@nyu.edu"
-      },
-      {
-        label: "LinkedIn",
-        value: "linkedin.com/in/justin-k-oh",
-        action: "Visit",
-        url: "https://www.linkedin.com/in/justin-k-oh/"
-      },
-      {
-        label: "GitHub",
-        value: "github.com/justinoh9",
-        action: "Visit",
-        url: "https://github.com/justinoh9"
-      }
-    ],
-    availability: {
-      eyebrow: "Open to internships",
-      headline: "Seeking software, embedded & firmware internships.",
-      copy:
-        "Computer engineering student at NYU Tandon (graduating December 2027), looking for internships in software, embedded systems, firmware, or computer hardware.",
-      buttonLabel: "Download Résumé",
-      buttonUrl: ""
-    }
+      { label: "Email", value: "justinoh@nyu.edu", url: "mailto:justinoh@nyu.edu" },
+      { label: "LinkedIn", value: "linkedin.com/in/justin-k-oh", url: "https://www.linkedin.com/in/justin-k-oh/" },
+      { label: "GitHub", value: "github.com/justinoh9", url: "https://github.com/justinoh9" }
+    ]
   },
 
   cooking: {

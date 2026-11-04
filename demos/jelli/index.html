@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jelli Ranking Engine, Interactive Demo | Justin Oh</title>
+  <meta name="description" content="Try the head-to-head ranking engine behind Jelli, the social music-rating app by Justin Oh and Eddie Guan." />
+  <meta name="theme-color" content="#110c0d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../demo.css?v=1" />
+  <style>
+    :root { --vinyl: #120d0e; --vinyl-2: #1e1618; --crimson: #c4274b; --rose: #f4e4e4; --dust: #a8929a; --amber: #c89a4a; }
+    body { background: var(--vinyl); color: var(--rose); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.4fr) auto; gap: var(--gutter); align-items: center; padding: clamp(1.5rem, 4vw, 3rem) var(--gutter); overflow: hidden; }
+    .hero h1 { font: 700 clamp(3.5rem, 10vw, 7.5rem)/0.95 Fraunces, Georgia, serif; }
+    .hero p { max-width: 36em; margin-top: 0.75rem; font-size: 1.0625rem; color: var(--dust); }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .btn { border-color: var(--rose); background: transparent; color: var(--rose); }
+    .btn.primary { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+    .btn:hover:not(:disabled) { box-shadow: 3px 3px 0 var(--crimson); }
+    .record { position: relative; width: clamp(8rem, 18vw, 14rem); aspect-ratio: 1; border-radius: 50%; background: repeating-radial-gradient(circle, #1a1315 0 3px, #261c1f 3px 5px); animation: spin 9s linear infinite; }
+    .record::after { content: ""; position: absolute; inset: 37%; border-radius: 50%; background: radial-gradient(circle, var(--vinyl) 0 9%, var(--crimson) 10%); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--gutter); padding: 0 var(--gutter) var(--gutter); align-items: start; }
+    .card { border: 1px solid #3a2c30; border-radius: 12px; background: var(--vinyl-2); padding: clamp(1rem, 2.5vw, 1.6rem); }
+    .step { color: var(--amber); }
+    .card h2 { font: 600 clamp(1.5rem, 3vw, 2.125rem)/1.15 Fraunces, Georgia, serif; margin: 0.3rem 0 1rem; }
+    .pick { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: 0.5rem; }
+    .pick button, .vs button { text-align: left; border: 1px solid #4a393e; border-radius: 10px; background: #261b1e; color: var(--rose); padding: 0.65rem 0.75rem; transition: border-color 0.15s, transform 0.12s; }
+    .pick button:hover, .vs button:hover { border-color: var(--crimson); transform: translateY(-2px); }
+    .album-title { display: block; font-weight: 600; line-height: 1.25; }
+    .album-artist { display: block; font-size: 0.875rem; color: var(--dust); }
+    .scores { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 0.3rem; }
+    .scores button { padding: 0.65rem 0; border: 1px solid #4a393e; border-radius: 8px; background: #261b1e; color: var(--rose); font-weight: 600; }
+    .scores button:hover { background: var(--crimson); border-color: var(--crimson); }
+    .scores button.hasgroup { border-color: var(--amber); }
+    .hint { margin-top: 0.6rem; font-size: 0.875rem; color: var(--dust); }
+    .vs { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0.6rem; align-items: stretch; }
+    .vs button { padding: clamp(1rem, 3vw, 1.75rem) 0.9rem; }
+    .vs .or { align-self: center; font: 600 1.25rem Fraunces, Georgia, serif; color: var(--dust); }
+    .escapes { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+    .search-trace { margin-top: 1rem; font: 400 0.75rem/1.5 var(--mono); color: var(--dust); }
+    .window { display: flex; gap: 2px; margin-top: 0.35rem; }
+    .window span { flex: 1; height: 0.5rem; border-radius: 2px; background: #3a2c30; }
+    .window span.live { background: var(--amber); }
+    .window span.mid { background: var(--crimson); }
+    .done-msg { font-size: 1.0625rem; }
+    .done-msg strong { color: var(--amber); }
+    .list-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-bottom: 0.6rem; }
+    .list-head h2 { margin: 0; font-size: 1.375rem; }
+    .link { background: none; border: 0; padding: 0; color: var(--dust); text-decoration: underline; text-underline-offset: 3px; font-size: 0.875rem; }
+    .rank { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr) 2.4rem; gap: 0.5rem; align-items: center; padding: 0.4rem 0.45rem; border-radius: 8px; }
+    .rank + .rank { margin-top: 1px; }
+    .rank.new { background: rgba(196, 39, 75, 0.28); }
+    .rank.foe { outline: 1px solid var(--amber); }
+    .rank-num { font: 400 0.75rem var(--mono); color: var(--dust); }
+    .rank-score { justify-self: end; padding: 0 0.4rem; border-radius: 5px; background: #33262a; font-weight: 600; font-size: 0.9375rem; }
+    .notes { border-top: 1px solid #3a2c30; }
+    .notes-grid h3 { color: var(--amber); }
+    .notes-grid li::before { background: var(--rose); }
+    .muted { color: var(--dust); }
+    .demo-bar { background: #000; }
+    code { font: 400 0.875em var(--mono); }
+    @media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } .hero { grid-template-columns: minmax(0, 1fr); } .record { display: none; } }
+    @media (max-width: 480px) { .scores { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+  <div class="demo-bar mono">
+    <a href="../../index.html#jelli">&larr; Justin Oh</a>
+    <span class="tag" style="color:#a8929a">Interactive demo of Jelli’s ranking engine.</span>
+  </div>
+  <header class="hero">
+    <div>
+      <h1>Jelli</h1>
+      <p>It’s hard to score an album out of 10 from nothing. Jelli takes a rough score, then has you compare the album against others you’ve ranked until it finds the right spot.</p>
+      <div class="hero-links">
+        <a class="btn primary" href="https://github.com/justinoh9/heard-app/blob/main/CASE_STUDY.md" target="_blank" rel="noreferrer">Case study &#8599;</a>
+      </div>
+    </div>
+    <div class="record" aria-hidden="true"></div>
+  </header>
+
+  <div class="layout">
+    <section class="card" id="stage" aria-live="polite"></section>
+    <section class="card">
+      <div class="list-head"><h2>Your ranking</h2><button type="button" class="link" id="reset">Start over</button></div>
+      <ol id="list"></ol>
+    </section>
+  </div>
+
+  <section class="notes">
+    <h2>About this demo</h2>
+    <div class="notes-grid">
+      <div>
+        <h3 class="mono">The algorithm</h3>
+        <ul>
+          <li>Albums sort by score first. Comparisons only happen between albums with the same score, using a binary search.</li>
+          <li>That’s about log₂(n) questions, so a long list doesn’t slow it down much.</li>
+          <li>“Haven’t heard it” takes that album out of the search but keeps its place. “Too close to call” puts the new album right below it.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">How it relates to the app</h3>
+        <ul>
+          <li>This is a JavaScript port of <code>TiebreakPlacement</code> from the app’s TypeScript engine, including skip and too-close.</li>
+          <li>It logs each pick like the app does. The app’s Elo view replays that log.</li>
+          <li>The starting list is sample data, and nothing gets saved.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">The full app</h3>
+        <ul>
+          <li>Built with Eddie Guan in Expo/React Native and TypeScript, for iOS, Android, and web.</li>
+          <li>Runs on Supabase with row-level security and no custom server.</li>
+          <li>Gets music data from iTunes, Last.fm, and Deezer.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+    const A = (id, title, artist) => ({ id, title, artist });
+
+    const seedList = () => [
+      [9, A("a1", "Rumours", "Fleetwood Mac")], [9, A("a2", "To Pimp a Butterfly", "Kendrick Lamar")],
+      [9, A("a3", "In Rainbows", "Radiohead")], [9, A("a4", "Blonde", "Frank Ocean")],
+      [9, A("a5", "Discovery", "Daft Punk")], [9, A("a6", "Abbey Road", "The Beatles")],
+      [9, A("a7", "Kind of Blue", "Miles Davis")],
+      [8, A("b1", "Currents", "Tame Impala")], [8, A("b2", "SOS", "SZA")], [8, A("b3", "AM", "Arctic Monkeys")],
+      [7, A("c1", "Melodrama", "Lorde")], [7, A("c2", "Random Access Memories", "Daft Punk")]
+    ].map(([score, item], i, all) => ({ item, score, tiebreak: all.filter((r) => r[0] === score).length - all.slice(0, i).filter((r) => r[0] === score).length - 1 }));
+
+    const pool = [
+      A("n1", "Thriller", "Michael Jackson"), A("n2", "The Miseducation of Lauryn Hill", "Lauryn Hill"),
+      A("n3", "Igor", "Tyler, The Creator"), A("n4", "Nevermind", "Nirvana"),
+      A("n5", "Purple Rain", "Prince"), A("n6", "Graduation", "Kanye West")
+    ];
+
+    /* Port of TiebreakPlacement from src/ranking/engine.ts */
+    class Placement {
+      constructor(list, item, score) {
+        this.list = list; this.item = item; this.score = score;
+        this.tied = list.filter((r) => r.score === score).sort((a, b) => b.tiebreak - a.tiebreak);
+        this.working = [...this.tied];
+        this.skipped = []; this.events = [];
+        this.lo = 0; this.hi = this.working.length; this.mid = -1; this.finalPos = 0;
+        this.done = this.working.length === 0;
+      }
+      next() {
+        if (this.done) return null;
+        if (this.lo >= this.hi) { this.finalPos = this.lo; this.done = true; this.mid = -1; return null; }
+        this.mid = Math.floor((this.lo + this.hi) / 2);
+        return this.working[this.mid];
+      }
+      choose(winner) {
+        if (this.mid < 0) return;
+        const opp = this.working[this.mid];
+        const newWins = winner === "new";
+        this.events.push({ winner: newWins ? this.item.id : opp.item.id, loser: newWins ? opp.item.id : this.item.id });
+        if (newWins) this.hi = this.mid; else this.lo = this.mid + 1;
+        this.mid = -1;
+      }
+      skip() {
+        if (this.mid < 0) return;
+        const opp = this.working[this.mid];
+        const idx = this.tied.indexOf(opp);
+        this.skipped.push({ ranked: opp, prevId: idx > 0 ? this.tied[idx - 1].item.id : null });
+        this.working.splice(this.mid, 1);
+        this.hi -= 1; this.mid = -1;
+      }
+      tooClose() {
+        if (this.mid < 0) return;
+        this.finalPos = this.mid + 1; this.done = true; this.mid = -1;
+      }
+      commit() {
+        const order = this.working.map((r) => r.item);
+        order.splice(this.finalPos, 0, this.item);
+        [...this.skipped].sort((a, b) => this.tied.indexOf(a.ranked) - this.tied.indexOf(b.ranked)).forEach(({ ranked, prevId }) => {
+          const prevIdx = prevId === null ? -1 : order.findIndex((it) => it.id === prevId);
+          order.splice(prevIdx + 1, 0, ranked.item);
+        });
+        const n = order.length;
+        const renumbered = order.map((it, i) => ({ item: it, score: this.score, tiebreak: n - 1 - i }));
+        return [...this.list.filter((r) => r.score !== this.score), ...renumbered];
+      }
+    }
+
+    let list, picks, placement, picked, score, foe, lastNew, lastAsked, lastCount;
+    const sorted = () => [...list].sort((a, b) => b.score - a.score || b.tiebreak - a.tiebreak);
+
+    function reset() {
+      list = seedList(); picks = pool.slice(); placement = null; picked = null; foe = null; lastNew = null;
+      render();
+    }
+
+    function renderList() {
+      $("list").innerHTML = sorted().map((r, i) => {
+        const cls = [r.item.id === lastNew ? "new" : "", foe && foe.item.id === r.item.id ? "foe" : ""].join(" ");
+        return `<li class="rank ${cls}"><span class="rank-num">${i + 1}</span><span><span class="album-title">${esc(r.item.title)}</span><span class="album-artist">${esc(r.item.artist)}</span></span><span class="rank-score">${r.score}</span></li>`;
+      }).join("");
+    }
+
+    function renderPick() {
+      const done = lastNew ? `<p class="done-msg" style="margin-bottom:1rem">Placed in <strong>${lastAsked} comparison${lastAsked === 1 ? "" : "s"}</strong> among ${lastCount} album${lastCount === 1 ? "" : "s"} with the same score. A one-by-one sort could take up to ${lastCount}.</p>` : "";
+      $("stage").innerHTML = picks.length
+        ? `${done}<span class="mono step">Step 1 of 3</span><h2>Pick an album to rate</h2><div class="pick">${picks.map((a) => `<button type="button" data-pick="${a.id}"><span class="album-title">${esc(a.title)}</span><span class="album-artist">${esc(a.artist)}</span></button>`).join("")}</div>`
+        : `${done}<h2>That’s the whole sample.</h2><p class="muted">Press “Start over” to try it again, or read how the full app was built.</p><p style="margin-top:1rem"><a class="btn primary" href="https://github.com/justinoh9/heard-app/blob/main/CASE_STUDY.md" target="_blank" rel="noreferrer">Read the case study &#8599;</a></p>`;
+    }
+
+    function renderScore() {
+      const has = new Set(list.map((r) => r.score));
+      $("stage").innerHTML = `<span class="mono step">Step 2 of 3</span><h2>Roughly, how good is <em>${esc(picked.title)}</em>?</h2>
+        <div class="scores" role="group" aria-label="Score from 1 to 10">${Array.from({ length: 10 }, (_, i) => i + 1).map((n) => `<button type="button" data-score="${n}" class="${has.has(n) ? "hasgroup" : ""}">${n}</button>`).join("")}</div>
+        <p class="hint">Try 9. Seven albums are already tied there, so you’ll see the search work.</p>`;
+    }
+
+    function renderVs() {
+      foe = placement.next();
+      renderList();
+      if (!foe) return finish();
+      const total = placement.working.length;
+      const cells = Array.from({ length: total }, (_, i) => `<span class="${i === placement.mid ? "mid" : i >= placement.lo && i < placement.hi ? "live" : ""}"></span>`).join("");
+      $("stage").innerHTML = `<span class="mono step">Step 3 of 3, comparison ${placement.events.length + 1}</span><h2>Which do you like more?</h2>
+        <div class="vs">
+          <button type="button" data-choose="new"><span class="album-title">${esc(picked.title)}</span><span class="album-artist">${esc(picked.artist)}</span></button>
+          <span class="or">or</span>
+          <button type="button" data-choose="existing"><span class="album-title">${esc(foe.item.title)}</span><span class="album-artist">${esc(foe.item.artist)}</span></button>
+        </div>
+        <div class="escapes">
+          <button type="button" class="btn small" data-escape="skip">Haven’t heard it</button>
+          <button type="button" class="btn small" data-escape="close">Too close to call</button>
+        </div>
+        <div class="search-trace">Binary search: positions still possible are in gold, the current opponent in red.
+          <div class="window" aria-hidden="true">${cells}</div>
+        </div>`;
+    }
+
+    function finish() {
+      lastAsked = placement.events.length;
+      lastCount = placement.tied.length;
+      lastNew = picked.id;
+      list = placement.commit();
+      picks = picks.filter((a) => a.id !== picked.id);
+      placement = null; picked = null; foe = null;
+      render();
+    }
+
+    function render() {
+      renderList();
+      if (picked && !placement) renderScore();
+      else if (placement) renderVs();
+      else renderPick();
+    }
+
+    $("stage").addEventListener("click", (e) => {
+      const t = e.target;
+      const p = t.closest("[data-pick]");
+      if (p) { picked = pool.find((a) => a.id === p.dataset.pick); return render(); }
+      const s = t.closest("[data-score]");
+      if (s) { placement = new Placement(list, picked, Number(s.dataset.score)); return render(); }
+      const c = t.closest("[data-choose]");
+      if (c) { placement.choose(c.dataset.choose); return renderVs(); }
+      const x = t.closest("[data-escape]");
+      if (x) { if (x.dataset.escape === "skip") placement.skip(); else placement.tooClose(); return renderVs(); }
+    });
+    $("reset").addEventListener("click", reset);
+    reset();
+  })();
+  </script>
+</body>
+</html>

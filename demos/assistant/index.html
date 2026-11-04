@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Leasing Assistant, Interactive Replay | Justin Oh</title>
+  <meta name="description" content="A scripted walkthrough of a production AI WhatsApp assistant built by Justin Oh: the conversation, the agent's tool calls, and the operations dashboard, side by side." />
+  <meta name="theme-color" content="#ff5a1f" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../demo.css?v=1" />
+  <style>
+    .hero { padding: clamp(1.5rem, 4vw, 3rem) var(--gutter); background: var(--signal); }
+    .hero h1 { font: 900 clamp(3rem, 8.5vw, 7rem)/0.85 var(--display); text-transform: uppercase; }
+    .hero p { max-width: 44em; margin-top: 0.9rem; font-size: 1.0625rem; }
+    .bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.6rem 1rem; padding: 0.8rem var(--gutter); border-bottom: 2px solid var(--ink); }
+    .scenarios, .transport { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+    .scn.on { background: var(--ink); color: var(--paper); }
+    .progress { font: 400 0.75rem/1 var(--mono); color: var(--muted); min-width: 4.5rem; text-align: right; }
+    .board { display: grid; grid-template-columns: minmax(17rem, 1fr) minmax(0, 1.25fr) minmax(16rem, 0.9fr); gap: var(--gutter); padding: var(--gutter); align-items: start; }
+    .col-panel { display: flex; flex-direction: column; height: min(72vh, 40rem); min-width: 0; }
+    .scroller { flex: 1; overflow-y: auto; padding: 0.8rem; min-height: 0; }
+    .phone-body { background: #e8e2d4; display: flex; flex-direction: column; gap: 0.45rem; }
+    .msg { max-width: 86%; padding: 0.45rem 0.65rem; border: 2px solid var(--ink); border-radius: 4px; font-size: 0.9375rem; line-height: 1.35; animation: pop 0.2s ease-out; }
+    .msg.user { align-self: flex-start; background: #fff; }
+    .msg.bot { align-self: flex-end; background: var(--ink); color: var(--paper); }
+    .msg.human { align-self: flex-end; background: var(--cobalt); color: var(--paper); }
+    .sys { align-self: center; padding: 0 0.5rem; border-radius: 3px; background: var(--paper-2); font: 400 0.6875rem/1.7 var(--mono); text-align: center; }
+    @keyframes pop { from { transform: translateY(5px); opacity: 0; } }
+    .empty-hint { color: var(--muted); font-size: 0.9375rem; }
+    .trace { display: flex; flex-direction: column; gap: 0.55rem; }
+    .t { flex: none; border: 2px solid var(--ink); border-radius: 4px; overflow: hidden; animation: pop 0.2s ease-out; background: #fff; }
+    .t-head { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.2rem 0.5rem; font: 400 0.75rem/1.5 var(--mono); border-bottom: 2px solid var(--ink); background: var(--paper-2); overflow-wrap: anywhere; }
+    .t.think .t-head { background: var(--paper-2); }
+    .t.tool .t-head { background: var(--cobalt); color: var(--paper); }
+    .t.guard .t-head { background: var(--signal); }
+    .t-body { padding: 0.4rem 0.55rem; font-size: 0.875rem; line-height: 1.4; }
+    pre { margin: 0; font: 400 0.75rem/1.45 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+    pre + pre { margin-top: 0.35rem; padding-top: 0.35rem; border-top: 1px dashed var(--line); }
+    .pre-lbl { display: block; font: 400 0.625rem/1.4 var(--mono); text-transform: uppercase; color: var(--muted); }
+    h3.dash { margin: 0.9rem 0 0.35rem; font: 400 0.6875rem/1.3 var(--mono); text-transform: uppercase; color: var(--muted); }
+    h3.dash:first-child { margin-top: 0; }
+    .stages { display: grid; gap: 2px; }
+    .stage { display: flex; align-items: center; gap: 0.45rem; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.875rem; color: var(--muted); }
+    .stage::before { content: ""; width: 0.55rem; height: 0.55rem; border: 2px solid currentColor; border-radius: 50%; flex: none; }
+    .stage.past { color: var(--ink); }
+    .stage.past::before { background: var(--ink); border-color: var(--ink); }
+    .stage.now { background: var(--ink); color: var(--paper); }
+    .stage.now::before { background: var(--signal); border-color: var(--signal); }
+    .dash-card { padding: 0.4rem 0.55rem; margin-bottom: 0.35rem; border: 2px solid var(--ink); border-radius: 4px; background: #fff; font-size: 0.875rem; line-height: 1.35; animation: pop 0.25s ease-out; }
+    .dash-card b { display: block; }
+    .dash-none { font-size: 0.875rem; color: var(--muted); }
+    .kv { display: grid; grid-template-columns: auto 1fr; gap: 0 0.6rem; font-size: 0.875rem; }
+    .kv dt { color: var(--muted); }
+    .arch { padding: var(--gutter); border-top: 2px solid var(--ink); }
+    .arch h2 { font: 600 1.5rem/1.2 var(--body); margin-bottom: 0.9rem; }
+    .arch-flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 0.6rem; counter-reset: a; }
+    .arch-flow li { padding: 0.55rem 0.65rem; border: 2px solid var(--ink); border-radius: 4px; background: #fbf8f1; font-size: 0.875rem; line-height: 1.4; }
+    .arch-flow b { display: block; font-size: 0.9375rem; }
+    @media (max-width: 1060px) {
+      .board { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .col-dash { grid-column: 1 / -1; }
+      .col-dash.col-panel { height: auto; }
+    }
+    @media (max-width: 680px) {
+      .board { grid-template-columns: minmax(0, 1fr); }
+      .col-panel { height: 26rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-bar mono">
+    <a href="../../index.html#ai-assistant">&larr; Justin Oh</a>
+    <span class="tag">Scripted replay. Every person, unit and price here is fictional.</span>
+  </div>
+  <header class="hero">
+    <h1>AI leasing assistant</h1>
+    <p>I built a WhatsApp assistant for a property-management company, and it’s running in production. I can’t show the real system or its conversations, so this is a scripted replay of how it works, with the chat, the agent’s tool calls, and a team view side by side.</p>
+  </header>
+
+  <div class="bar">
+    <div class="scenarios" id="scenarios" role="group" aria-label="Scenario"></div>
+    <div class="transport">
+      <button type="button" class="btn small primary" id="next">Next step</button>
+      <button type="button" class="btn small" id="auto">Auto-play</button>
+      <button type="button" class="btn small" id="restart">Restart</button>
+      <span class="progress" id="progress" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <div class="board">
+    <section class="panel col-panel" aria-label="WhatsApp conversation">
+      <div class="panel-bar"><span>WhatsApp</span><span id="who"></span></div>
+      <div class="scroller phone-body" id="phone"></div>
+    </section>
+    <section class="panel col-panel" aria-label="Agent trace">
+      <div class="panel-bar"><span>Agent trace: Claude tool-use loop</span></div>
+      <div class="scroller trace" id="trace"></div>
+    </section>
+    <section class="panel col-panel col-dash" aria-label="Team dashboard">
+      <div class="panel-bar"><span>Team dashboard</span></div>
+      <div class="scroller" id="dash"></div>
+    </section>
+  </div>
+
+  <section class="arch">
+    <h2>The real architecture</h2>
+    <ol class="arch-flow">
+      <li><b>WhatsApp bridge</b>Node.js service that sends and receives messages.</li>
+      <li><b>FastAPI backend</b>Python service running the agentic Claude tool-use loop.</li>
+      <li><b>PostgreSQL</b>Leads, viewings, maintenance and deal stages, through SQLAlchemy.</li>
+      <li><b>Discord admin bot</b>Alerts the team and handles human-in-the-loop escalation.</li>
+      <li><b>React dashboard</b>React/Vite view of the lead funnel and operations.</li>
+      <li><b>Deployment</b>Docker Compose on a VPS behind an HTTPS reverse proxy.</li>
+    </ol>
+  </section>
+
+  <section class="notes">
+    <h2>About this demo</h2>
+    <div class="notes-grid">
+      <div>
+        <h3 class="mono">What’s real</h3>
+        <ul>
+          <li>Tool names, parameters, and deal stages come from the production code.</li>
+          <li>Two rules carry over: prices always come from a tool, and money or legal questions go to a person.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">What’s scripted</h3>
+        <ul>
+          <li>No AI model runs on this page. I wrote the messages, reasoning notes, and tool results for the demo.</li>
+          <li>The dashboard is a rough sketch, not the production UI.</li>
+          <li>It has no client data or real conversations.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">Design decisions</h3>
+        <ul>
+          <li>The model never does rent math. The server calculates quotes so it can’t make up a price.</li>
+          <li>Handing off to a person is just another tool call, so it gets logged like everything else.</li>
+          <li>Deal stages live in the database, so the scheduled follow-ups and the dashboard stay in sync.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+    const STAGES = ["new", "info_gathering", "viewing_scheduled", "viewed", "pricing", "lease_sent", "signed"];
+
+    const user = (text) => ({ type: "user", text });
+    const bot = (text) => ({ type: "bot", text });
+    const think = (text) => ({ type: "think", text });
+    const tool = (name, input, result, effect) => ({ type: "tool", name, input, result, effect });
+
+    const SCENARIOS = [
+      {
+        id: "prospect",
+        label: "New renter",
+        who: "Maya, prospective tenant",
+        start: { stage: "new", lead: {} },
+        steps: [
+          user("Hi! Do you have anything under $2,400 for January?"),
+          think("A new prospect shared a budget and a move-in date. Save those, then check real availability instead of guessing."),
+          tool("capture_lead", { budget: 2400, move_in_date: "2027-01-01" }, { saved: true }, { stage: "info_gathering", lead: { Budget: "$2,400", "Move-in": "Jan 1, 2027" } }),
+          tool("search_listings", { max_budget: 2400, move_in_by: "2027-01-01" }, { units: [{ listing: "Maple 2B", bedrooms: 2 }, { listing: "Maple 3A", bedrooms: 1 }] }),
+          bot("Hi! Yes, two places fit: Maple 2B (two bedrooms) and Maple 3A (one bedroom). Both are open for January. How many people would be living there?"),
+          user("2B looks good. There’d be two of us, I’m Maya."),
+          think("A price is coming up. I must quote through the tool, and never work out rent myself."),
+          tool("capture_lead", { name: "Maya", interested_unit: "Maple 2B" }, { saved: true }, { lead: { Name: "Maya", Unit: "Maple 2B" } }),
+          tool("quote_rent", { listing: "Maple 2B", num_people: 2 }, { monthly_rent: 2300, note: "computed on the server" }),
+          bot("Maple 2B for two people is $2,300 a month. Would you like to see it?"),
+          user("Yes, can we come Thursday evening?"),
+          tool("request_viewing", { listing: "Maple 2B", preferred_times: "Thursday evening", name: "Maya" }, { status: "requested", team_notified: true }, { stage: "viewing_scheduled", viewing: "Maya: Maple 2B, Thursday evening" }),
+          bot("Done, I’ve sent your Thursday evening request to the team. They’ll confirm the time here shortly.")
+        ]
+      },
+      {
+        id: "tenant",
+        label: "Tenant repair",
+        who: "Sam, current tenant",
+        start: { lead: { Tenant: "Sam" } },
+        steps: [
+          user("The sink in my kitchen is leaking into the cabinet."),
+          think("A current tenant is reporting a problem. I need the unit and a clear description before logging it."),
+          bot("Sorry about that. Which unit are you in? And is water still actively leaking?"),
+          user("Unit 4C. It’s a slow drip, I put a bucket under it."),
+          think("Enough detail. Classify it as plumbing so it reaches the right person."),
+          tool("log_maintenance", { issue: "Slow drip under kitchen sink, leaking into cabinet. Tenant placed a bucket.", unit: "4C", category: "plumbing" }, { ticket: "M-1042", status: "open", routed_to: "plumbing" }, { ticket: "M-1042, plumbing: slow drip under kitchen sink, unit 4C" }),
+          bot("Thanks, Sam. I’ve logged it as ticket M-1042 and sent it to the team. Keep the bucket there for now, and tell me if it gets worse."),
+          user("Also, can my friend stay with me for a few weeks?"),
+          think("A policy question. Answer from the official documents, not from memory."),
+          tool("search_knowledge", { query: "guest policy long stay" }, { source: "Guest policy", excerpt: "Guests staying longer than 14 days need written approval." }),
+          bot("Per the guest policy, a stay longer than 14 days needs written approval. I can pass that request along to the team if you’d like.")
+        ]
+      },
+      {
+        id: "guard",
+        label: "Handoff to a human",
+        who: "Leo, prospective tenant",
+        start: { stage: "pricing", lead: { Name: "Leo", Unit: "Maple 3A" } },
+        steps: [
+          user("If I sign today, can you take $300 off the rent and add a clause letting me leave early?"),
+          think("This is a discount plus a lease change. Money and legal terms aren’t mine to decide, so I won’t promise anything or guess."),
+          { type: "guard", text: "Guardrail: money and legal questions are handed to a person." },
+          tool("escalate_to_human", { reason: "Rent discount and early-termination clause requested", summary: "Leo wants $300 off Maple 3A and an early-exit clause, and would sign today." }, { escalated: true, notified: "team channel" }, { escalation: "Leo: discount + lease clause on Maple 3A" }),
+          bot("Those are decisions for the team, so I’ve passed along your request with the details. Someone will reply right here."),
+          { type: "sys", text: "Team member joins the conversation" },
+          { type: "human", text: "Hi Leo, this is Dana from the leasing team. Let me look at Maple 3A and get back to you this afternoon." }
+        ]
+      }
+    ];
+
+    let scn = SCENARIOS[0], idx = 0, timer = null, state;
+
+    const freshState = () => ({ stage: scn.start.stage || null, lead: { ...(scn.start.lead || {}) }, viewings: [], tickets: [], escalations: [] });
+
+    function renderDash() {
+      const stageIdx = STAGES.indexOf(state.stage);
+      const stages = state.stage ? `<h3 class="dash">Deal stage</h3><div class="stages">${STAGES.map((s, i) => `<div class="stage ${i < stageIdx ? "past" : i === stageIdx ? "now" : ""}">${s}</div>`).join("")}</div>` : "";
+      const lead = Object.entries(state.lead);
+      const cards = (items, none) => items.length ? items.map((x) => `<div class="dash-card">${esc(x)}</div>`).join("") : `<p class="dash-none">${none}</p>`;
+      $("dash").innerHTML = `
+        ${stages}
+        <h3 class="dash">Contact</h3>
+        ${lead.length ? `<dl class="kv">${lead.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>` : '<p class="dash-none">Nothing captured yet</p>'}
+        <h3 class="dash">Viewing requests</h3>${cards(state.viewings, "None")}
+        <h3 class="dash">Maintenance</h3>${cards(state.tickets, "None")}
+        <h3 class="dash">Needs a human</h3>${cards(state.escalations, "None")}`;
+    }
+
+    function applyEffect(e) {
+      if (!e) return;
+      if (e.stage) state.stage = e.stage;
+      if (e.lead) Object.assign(state.lead, e.lead);
+      if (e.viewing) state.viewings.push(e.viewing);
+      if (e.ticket) state.tickets.push(e.ticket);
+      if (e.escalation) state.escalations.push(e.escalation);
+      renderDash();
+    }
+
+    const addTo = (id, html) => {
+      const box = $(id);
+      box.querySelector(".empty-hint")?.remove();
+      box.insertAdjacentHTML("beforeend", html);
+      box.scrollTop = box.scrollHeight;
+    };
+
+    function runStep(s) {
+      if (s.type === "user") {
+        addTo("phone", `<div class="msg user">${esc(s.text)}</div>`);
+        addTo("trace", `<div class="t"><div class="t-head"><span>Message received</span></div><div class="t-body">Added to the conversation, then sent to the model with its tools.</div></div>`);
+      } else if (s.type === "bot") {
+        addTo("phone", `<div class="msg bot">${esc(s.text)}</div>`);
+        addTo("trace", `<div class="t"><div class="t-head"><span>Final reply</span><span>end_turn</span></div><div class="t-body">No more tools needed, so the reply goes out through the bridge.</div></div>`);
+      } else if (s.type === "human") {
+        addTo("phone", `<div class="msg human">${esc(s.text)}</div>`);
+      } else if (s.type === "sys") {
+        addTo("phone", `<div class="sys">${esc(s.text)}</div>`);
+      } else if (s.type === "think") {
+        addTo("trace", `<div class="t think"><div class="t-head"><span>Reasoning (illustrative)</span></div><div class="t-body">${esc(s.text)}</div></div>`);
+      } else if (s.type === "guard") {
+        addTo("trace", `<div class="t guard"><div class="t-head"><span>Guardrail</span></div><div class="t-body">${esc(s.text)}</div></div>`);
+      } else if (s.type === "tool") {
+        addTo("trace", `<div class="t tool"><div class="t-head"><span>tool_use: ${esc(s.name)}</span></div><div class="t-body">
+          <pre><span class="pre-lbl">input</span>${esc(JSON.stringify(s.input, null, 1))}</pre>
+          <pre><span class="pre-lbl">result</span>${esc(JSON.stringify(s.result, null, 1))}</pre></div></div>`);
+        applyEffect(s.effect);
+      }
+    }
+
+    function updateControls() {
+      const done = idx >= scn.steps.length;
+      $("next").disabled = done;
+      $("progress").textContent = done ? "Finished" : `Step ${idx} of ${scn.steps.length}`;
+      if (done) stopAuto();
+    }
+
+    function next() {
+      if (idx >= scn.steps.length) return;
+      runStep(scn.steps[idx]);
+      idx += 1;
+      updateControls();
+    }
+
+    function stopAuto() {
+      clearInterval(timer);
+      timer = null;
+      $("auto").textContent = "Auto-play";
+    }
+
+    function load(s) {
+      stopAuto();
+      scn = s;
+      idx = 0;
+      state = freshState();
+      $("who").textContent = s.who;
+      $("phone").innerHTML = '<p class="empty-hint">Press “Next step” to start the conversation.</p>';
+      $("trace").innerHTML = '<p class="empty-hint">Tool calls appear here as the agent works.</p>';
+      $("scenarios").innerHTML = SCENARIOS.map((x) => `<button type="button" class="btn small scn ${x.id === s.id ? "on" : ""}" data-s="${x.id}">${esc(x.label)}</button>`).join("");
+      renderDash();
+      updateControls();
+    }
+
+    $("scenarios").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-s]");
+      if (b) load(SCENARIOS.find((x) => x.id === b.dataset.s));
+    });
+    $("next").addEventListener("click", () => { stopAuto(); next(); });
+    $("restart").addEventListener("click", () => load(scn));
+    $("auto").addEventListener("click", () => {
+      if (timer) return stopAuto();
+      if (idx >= scn.steps.length) load(scn);
+      $("auto").textContent = "Pause";
+      next();
+      timer = setInterval(next, 1500);
+    });
+    load(SCENARIOS[0]);
+  })();
+  </script>
+</body>
+</html>

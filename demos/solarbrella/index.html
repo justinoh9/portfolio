@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solarbrella, Interactive Demo | Justin Oh</title>
+  <meta name="description" content="How Justin Oh's Arduino light-tracking solar umbrella works: an interactive simulation of the control loop, plus the real hardware build." />
+  <meta name="theme-color" content="#1f3ddb" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../demo.css?v=1" />
+  <style>
+    .hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--gutter); align-items: end; padding: clamp(1.5rem, 4vw, 3rem) var(--gutter); background: var(--signal); }
+    .hero h1 { font: 900 clamp(3.5rem, 10vw, 8.5rem)/0.85 var(--display); text-transform: uppercase; }
+    .hero p { max-width: 34em; font-size: 1.0625rem; }
+    .facts { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem; }
+    .facts b { display: block; font: 900 clamp(2.25rem, 5vw, 3.5rem)/1 var(--display); }
+    .facts span { font: 400 0.6875rem/1.3 var(--mono); text-transform: uppercase; }
+    .sim { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 1fr); gap: var(--gutter); padding: var(--gutter); align-items: start; }
+    svg { display: block; width: 100%; height: auto; }
+    .controls { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; padding: 0.7rem 0.9rem; border-top: 2px solid var(--ink); }
+    .controls input[type=range] { flex: 1; min-width: 10rem; accent-color: var(--cobalt); }
+    .pad { padding: 0.9rem; }
+    .meter { margin-bottom: 0.8rem; }
+    .meter-top { display: flex; justify-content: space-between; font-size: 0.9375rem; font-weight: 500; }
+    .meter-track { height: 1rem; margin-top: 0.2rem; border: 2px solid var(--ink); border-radius: 3px; background: #fff; overflow: hidden; }
+    .meter-track i { display: block; height: 100%; }
+    .gain { padding-top: 0.7rem; border-top: 1px solid var(--line); }
+    .gain b { display: block; font: 900 3.25rem/1 var(--display); color: var(--cobalt); }
+    .small { font-size: 0.875rem; color: var(--muted); margin-top: 0.3rem; }
+    .loop { display: grid; gap: 0.25rem; margin-top: 0.9rem; font: 400 0.75rem/1.5 var(--mono); }
+    .loop div { padding: 0.15rem 0.45rem; border-radius: 3px; }
+    .loop div.on { background: var(--ink); color: var(--paper); }
+    .build { padding: 0 var(--gutter) var(--gutter); }
+    .build h2 { font: 600 1.5rem/1.2 var(--body); margin-bottom: 0.8rem; }
+    .gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gutter); }
+    .gallery figure .frame { aspect-ratio: 4 / 5; overflow: hidden; border: 2px solid var(--ink); border-radius: 4px; }
+    .gallery img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery figcaption { margin-top: 0.45rem; font-size: 0.9375rem; line-height: 1.35; }
+    @media (max-width: 860px) {
+      .hero, .sim { grid-template-columns: minmax(0, 1fr); }
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-bar mono">
+    <a href="../../index.html#solarbrella">&larr; Justin Oh</a>
+    <span class="tag">Interactive simulation of a real hardware build.</span>
+  </div>
+  <header class="hero">
+    <div><h1>Solar&shy;brella</h1></div>
+    <div>
+      <p>An umbrella whose solar panels turn to face the light. It runs C++ on an Arduino, with a 3D-printed, laser-cut mechanism and hand-wired panel arrays.</p>
+      <div class="facts">
+        <div><b>+25%</b><span>Up to, vs. a fixed angle, measured</span></div>
+        <div><b>16.9V</b><span>From the series array, measured</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="sim" aria-label="Tracking simulation">
+    <div class="panel">
+      <div class="panel-bar"><span>Simulation: move the sun</span><span id="clock"></span></div>
+      <svg id="scene" viewBox="0 0 640 340" role="img" aria-label="Side view of a tracking panel and a fixed panel under a moving sun">
+        <rect width="640" height="340" fill="#dfe6ff"/>
+        <path d="M60 270 A260 230 0 0 1 580 270" fill="none" stroke="#14161a" stroke-dasharray="3 6"/>
+        <rect y="270" width="640" height="70" fill="#14161a"/>
+        <g id="rays"></g>
+        <circle id="sun" r="20" fill="#ff5a1f" stroke="#14161a" stroke-width="2"/>
+        <g transform="translate(200 270)">
+          <rect x="-3" y="-78" width="6" height="78" fill="#14161a"/>
+          <g id="trackPanel" transform="translate(0 -78)">
+            <rect x="-70" y="-5" width="140" height="10" fill="#1f3ddb" stroke="#14161a" stroke-width="2"/>
+            <rect x="-8" y="-17" width="16" height="12" fill="#14161a"/>
+            <circle id="sensorL" cx="-22" cy="-9" r="5" stroke="#14161a" stroke-width="1.5"/>
+            <circle id="sensorR" cx="22" cy="-9" r="5" stroke="#14161a" stroke-width="1.5"/>
+          </g>
+          <text y="48" text-anchor="middle" fill="#f6f1e7" font-family="monospace" font-size="13">TRACKING</text>
+        </g>
+        <g transform="translate(450 270)">
+          <rect x="-3" y="-78" width="6" height="78" fill="#14161a"/>
+          <rect x="-70" y="-83" width="140" height="10" fill="#8a8678" stroke="#14161a" stroke-width="2"/>
+          <text y="48" text-anchor="middle" fill="#f6f1e7" font-family="monospace" font-size="13">FIXED</text>
+        </g>
+      </svg>
+      <div class="controls">
+        <button type="button" class="btn small primary" id="play">Play the day</button>
+        <input type="range" id="time" min="0" max="100" step="0.25" value="18" aria-label="Sun position across the day" />
+        <button type="button" class="btn small" id="nudge">Pass a cloud</button>
+      </div>
+    </div>
+
+    <div class="panel pad">
+      <div class="meter">
+        <div class="meter-top"><span>Tracking panel</span><span id="trackVal"></span></div>
+        <div class="meter-track"><i id="trackBar" style="background:var(--cobalt)"></i></div>
+      </div>
+      <div class="meter">
+        <div class="meter-top"><span>Fixed panel</span><span id="fixedVal"></span></div>
+        <div class="meter-track"><i id="fixedBar" style="background:#8a8678"></i></div>
+      </div>
+      <div class="gain">
+        <b id="gain">+0 pts</b>
+        <span class="mono muted">Extra output right now, simulated</span>
+        <p class="small">Over a full simulated day: <strong id="dayGain"></strong>. That’s with perfect geometry. The real prototype measured up to 25%, likely because fixed panels still catch diffuse light and the mechanism isn’t perfect.</p>
+      </div>
+      <div class="loop" id="loop" aria-label="Control loop">
+        <div data-s="read">1. read left + right light sensors</div>
+        <div data-s="compare">2. compare: which side is brighter?</div>
+        <div data-s="move">3. step servo toward brighter side</div>
+        <div data-s="hold">4. balanced: hold still, save power</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="build">
+    <h2>The real build</h2>
+    <div class="gallery">
+      <figure><div class="frame"><img src="../../assets/solarbrella/solarbrella-full.jpg" alt="Finished prototype with two tilted panel arrays above a canopy" loading="lazy" style="object-position:50% 10%"></div><figcaption>The assembled prototype, with two panel arrays above the canopy.</figcaption></figure>
+      <figure><div class="frame"><img src="../../assets/solarbrella/solarbrella-mechanism.jpg" alt="3D-printed linkage and servo housing under a laser-cut wooden panel mount" loading="lazy"></div><figcaption>The servo linkage: 3D-printed parts under a laser-cut mount.</figcaption></figure>
+      <figure><div class="frame"><img src="../../assets/solarbrella/solarbrella-panels.jpg" alt="Solar panels arranged on the mounts" loading="lazy"></div><figcaption>The panel arrays, hand-wired in series.</figcaption></figure>
+      <figure><div class="frame"><img src="../../assets/solarbrella/solarbrella-testing.jpg" alt="Multimeter reading 16.90 volts from a chain of solar panels" loading="lazy"></div><figcaption>Testing the series array: 16.90V on the meter.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="notes">
+    <h2>About this demo</h2>
+    <div class="notes-grid">
+      <div>
+        <h3 class="mono">What’s measured</h3>
+        <ul>
+          <li>Up to 25% more output than a fixed angle and 16.9V from the series array, both measured on the real prototype.</li>
+          <li>The photos are all of the actual build.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">What’s simulated</h3>
+        <ul>
+          <li>This is a simplified side view, not the firmware. Output is just the cosine of the angle between the sun and the panel.</li>
+          <li>It ignores diffuse light, panel temperature, and motor power, so the numbers won’t match the measurements.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">What went into it</h3>
+        <ul>
+          <li>C++ on an Arduino, with sensors and servos.</li>
+          <li>Fusion 360, 3D printing, and laser cutting.</li>
+          <li>Power circuits and wiring, on a small budget.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const LIMIT = 45;       // mechanical tilt limit, degrees (simulation value)
+    const STEP = 1.6;       // servo step per frame, degrees
+    const DEADBAND = 0.012; // ignore tiny sensor differences so the servo doesn't jitter
+    let tilt = -30, playing = false, cloud = 0, phase = "read";
+
+    // t in 0..100 maps to the sun moving from -80 degrees (morning) to +80 (evening) from vertical.
+    const sunAngle = (t) => -80 + (t / 100) * 160;
+    const cosd = (d) => Math.cos((d * Math.PI) / 180);
+    const output = (sun, panel) => Math.max(0, cosd(sun - panel));
+
+    function dayGain() {
+      let tr = 0, fx = 0;
+      for (let a = -80; a <= 80; a += 1) {
+        tr += output(a, Math.max(-LIMIT, Math.min(LIMIT, a)));
+        fx += output(a, 0);
+      }
+      return (tr / fx - 1) * 100;
+    }
+    $("dayGain").textContent = `+${dayGain().toFixed(0)}%`;
+
+    function frame() {
+      if (playing) {
+        const t = Number($("time").value) + 0.25;
+        if (t >= 100) { playing = false; $("play").textContent = "Play the day"; }
+        $("time").value = Math.min(100, t);
+      }
+      const t = Number($("time").value);
+      const sun = sunAngle(t);
+      const light = 1 - cloud;
+      if (cloud > 0) cloud = Math.max(0, cloud - 0.006);
+
+      // The two sensors sit on either side of a shade, so each sees more light when
+      // the sun is on its side of the panel's normal.
+      const err = sun - tilt;
+      const left = light * Math.max(0, 0.5 - Math.sin((err * Math.PI) / 180) / 2);
+      const right = light * Math.max(0, 0.5 + Math.sin((err * Math.PI) / 180) / 2);
+      const diff = right - left;
+      if (Math.abs(diff) > DEADBAND && light > 0.25) {
+        const before = tilt;
+        tilt = Math.max(-LIMIT, Math.min(LIMIT, tilt + Math.sign(diff) * Math.min(STEP, Math.abs(err))));
+        phase = tilt === before ? "hold" : "move";
+      } else {
+        phase = "hold";
+      }
+
+      const sx = 320 + 260 * Math.sin((sun * Math.PI) / 180);
+      const sy = 270 - 230 * cosd(sun);
+      $("sun").setAttribute("cx", sx);
+      $("sun").setAttribute("cy", sy);
+      $("sun").setAttribute("opacity", 0.35 + 0.65 * light);
+      $("trackPanel").setAttribute("transform", `translate(0 -78) rotate(${tilt})`);
+      const shade = (v) => `rgb(${Math.round(60 + 195 * v)},${Math.round(60 + 150 * v)},40)`;
+      $("sensorL").setAttribute("fill", shade(left));
+      $("sensorR").setAttribute("fill", shade(right));
+      $("rays").innerHTML = [[200, 192], [450, 192]].map(([x, y]) =>
+        `<line x1="${sx}" y1="${sy}" x2="${x}" y2="${y}" stroke="#ff5a1f" stroke-opacity="${0.15 + 0.5 * light}" stroke-width="2"/>`).join("");
+
+      const a = output(sun, tilt) * light, b = output(sun, 0) * light;
+      $("trackBar").style.width = `${a * 100}%`;
+      $("fixedBar").style.width = `${b * 100}%`;
+      $("trackVal").textContent = `${(a * 100).toFixed(0)}%`;
+      $("fixedVal").textContent = `${(b * 100).toFixed(0)}%`;
+      $("gain").textContent = `+${Math.max(0, (a - b) * 100).toFixed(0)} pts`;
+      const hour = 6 + (t / 100) * 13;
+      const h = Math.floor(hour), m = Math.floor((hour - h) * 60);
+      $("clock").textContent = `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+      document.querySelectorAll("#loop div").forEach((d) => d.classList.toggle("on", d.dataset.s === phase));
+    }
+
+    $("play").addEventListener("click", () => {
+      playing = !playing;
+      if (playing && Number($("time").value) >= 100) $("time").value = 0;
+      $("play").textContent = playing ? "Pause" : "Play the day";
+    });
+    $("nudge").addEventListener("click", () => { cloud = 0.9; });
+    // A fixed timestep keeps servo speed the same on every screen refresh rate.
+    setInterval(frame, 33);
+    frame();
+  })();
+  </script>
+</body>
+</html>

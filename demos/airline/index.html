@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airline Reservation System, Live Demo | Justin Oh</title>
+  <meta name="description" content="A working airline reservation demo by Justin Oh. Search, book, and manage flights while watching the real SQL run in your browser." />
+  <meta name="theme-color" content="#1f3ddb" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../demo.css?v=1" />
+  <link rel="stylesheet" href="airline.css?v=1" />
+</head>
+<body>
+  <div class="demo-bar mono">
+    <a href="../../index.html#air-tickets">&larr; Justin Oh</a>
+    <span class="tag">Live demo. Fictional data, runs only in your browser.</span>
+  </div>
+
+  <header class="air-head">
+    <div class="air-brand">
+      <span class="air-logo">Northline</span>
+      <span class="mono">Reservation system</span>
+    </div>
+    <div class="role-switch" role="group" aria-label="View the system as">
+      <button type="button" class="role" data-role="customer">Customer: Ava Chen</button>
+      <button type="button" class="role" data-role="staff">Staff: Dana Reyes</button>
+    </div>
+  </header>
+
+  <div class="air-layout">
+    <main class="air-main">
+      <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+      <div id="view"><p class="muted" id="loading">Starting the database…</p></div>
+    </main>
+
+    <aside class="panel console" aria-label="Under the hood">
+      <div class="panel-bar">
+        <span>Under the hood</span>
+        <button type="button" class="link-btn" id="resetBtn">Reset data</button>
+      </div>
+      <div class="console-tabs" id="consoleTabs">
+        <button type="button" data-tab="log" class="on">Live queries</button>
+        <button type="button" data-tab="sql">Run SQL</button>
+        <button type="button" data-tab="er">ER diagram</button>
+      </div>
+      <div class="console-body" id="pane-log"><ol id="log"></ol></div>
+      <div class="console-body" id="pane-sql" hidden>
+        <div class="presets" id="presets"></div>
+        <textarea id="sqlInput" rows="5" spellcheck="false" aria-label="SQL to run"></textarea>
+        <button type="button" class="btn small primary" id="sqlRun">Run</button>
+        <div id="sqlOut"></div>
+      </div>
+      <div class="console-body" id="pane-er" hidden>
+        <img src="er-diagram.png" alt="Hand-drawn ER diagram of airlines, staff, airplanes, flights, airports, customers, tickets and ratings" loading="lazy" />
+        <p class="muted er-note">The ER diagram I drew for the project. It matches the tables running on this page.</p>
+      </div>
+    </aside>
+  </div>
+
+  <section class="notes">
+    <h2>About this demo</h2>
+    <div class="notes-grid">
+      <div>
+        <h3 class="mono">Same as the original</h3>
+        <ul>
+          <li>The schema is the project’s <code>create_tables.sql</code>, unchanged: nine tables with their keys and CHECK constraints.</li>
+          <li>Search, seat checks, purchases, ratings, and the staff pages use queries ported from the PHP.</li>
+          <li>Every query runs in a real SQL engine and shows up in the panel.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">Different from the original</h3>
+        <ul>
+          <li>The original is PHP and MySQL on a server. This version uses SQLite compiled to WebAssembly, so it runs without a backend.</li>
+          <li>There’s no login, just the role switch at the top, and it doesn’t collect payment details.</li>
+          <li>The airline, people, and flights are made up. Dates are generated from today’s date.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">What I’d fix in the original</h3>
+        <ul>
+          <li>Hash the passwords. The class project stores and compares them as plain text.</li>
+          <li>Switch from escaped strings to prepared statements, which this demo uses.</li>
+          <li>Put the seat check and ticket insert in one transaction so two people can’t buy the last seat. This demo does that too.</li>
+          <li>Only let people rate flights they actually took. The original doesn’t check, and here the interface handles it.</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem"><a class="btn small" href="https://github.com/justinoh9/Airplane-Ticket-Reservation-System" target="_blank" rel="noreferrer">Original PHP + MySQL code &#8599;</a></p>
+  </section>
+
+  <script src="vendor/sql-wasm.js"></script>
+  <script src="airline.js?v=1"></script>
+</body>
+</html>

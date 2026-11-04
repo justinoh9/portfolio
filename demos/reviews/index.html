@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Analyzer, Live Demo | Justin Oh</title>
+  <meta name="description" content="Justin Oh's TF-IDF and logistic regression sentiment model, running in your browser. Score a review and see which words drove the prediction." />
+  <meta name="theme-color" content="#1f3ddb" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../demo.css?v=1" />
+  <style>
+    .hero { padding: clamp(1.5rem, 4vw, 3rem) var(--gutter); background: var(--ink); color: var(--paper); }
+    .hero h1 { font: 900 clamp(3rem, 9vw, 7.5rem)/0.85 var(--display); text-transform: uppercase; }
+    .hero p { max-width: 42em; margin-top: 0.9rem; font-size: 1.0625rem; color: #d8d3c7; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--gutter); padding: var(--gutter); align-items: start; }
+    .pad { padding: 0.9rem; }
+    textarea { width: 100%; padding: 0.6rem; border: 2px solid var(--ink); border-radius: 4px; background: #fff; resize: vertical; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.6rem 0 0.2rem; }
+    .verdict { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .verdict strong { font: 900 clamp(2.5rem, 6vw, 4.25rem)/0.9 var(--display); text-transform: uppercase; }
+    .verdict.positive strong { color: var(--good); }
+    .verdict.negative strong { color: var(--bad); }
+    .verdict.uncertain strong { color: var(--muted); }
+    .prob { font: 400 0.8125rem/1.3 var(--mono); text-align: right; }
+    .gauge { position: relative; height: 0.9rem; margin: 0.7rem 0 0.25rem; border: 2px solid var(--ink); border-radius: 3px; background: linear-gradient(90deg, #f2b8ad 0 40%, var(--paper-2) 40% 60%, #b7e3cc 60%); }
+    .gauge i { position: absolute; top: -5px; bottom: -5px; width: 4px; margin-left: -2px; background: var(--ink); transition: left 0.25s; }
+    .gauge-scale { display: flex; justify-content: space-between; font: 400 0.6875rem/1.3 var(--mono); color: var(--muted); }
+    h2.lbl { margin: 1.1rem 0 0.45rem; font: 400 0.75rem/1.3 var(--mono); text-transform: uppercase; color: var(--muted); }
+    .bar-row { display: grid; grid-template-columns: minmax(6rem, 10rem) 1fr 3.25rem; gap: 0.5rem; align-items: center; font-size: 0.9375rem; padding: 0.12rem 0; }
+    .bar-track { height: 0.7rem; }
+    .bar-track i { display: block; height: 100%; border-radius: 2px; }
+    .bar-num { font: 400 0.75rem/1 var(--mono); text-align: right; color: var(--muted); }
+    .flag { display: inline-block; margin: 0.15rem 0.25rem 0 0; padding: 0 0.4rem; border-radius: 3px; background: #fbdcd2; color: var(--bad); font: 400 0.75rem/1.6 var(--mono); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .stat b { display: block; font: 900 clamp(2.25rem, 5vw, 3.5rem)/1 var(--display); }
+    .stat span { font: 400 0.6875rem/1.3 var(--mono); text-transform: uppercase; color: var(--muted); }
+    .split { display: flex; height: 1.4rem; margin-top: 0.8rem; border: 2px solid var(--ink); border-radius: 3px; overflow: hidden; }
+    .split i { display: block; font: 400 0.6875rem/1.2rem var(--mono); text-align: center; font-style: normal; overflow: hidden; white-space: nowrap; }
+    .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .term-list li { display: flex; justify-content: space-between; font-size: 0.9375rem; border-bottom: 1px solid var(--line); padding: 0.12rem 0; }
+    .limit { margin-top: 0.75rem; font-size: 0.875rem; color: var(--muted); }
+    @media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="demo-bar mono">
+    <a href="../../index.html#review-analyzer">&larr; Justin Oh</a>
+    <span class="tag">Live demo. Your text stays in your browser.</span>
+  </div>
+  <header class="hero">
+    <h1>Review analyzer</h1>
+    <p>A sentiment model I trained with scikit-learn, exported to JSON and running here with no server. Type a review and see which words moved the prediction.</p>
+  </header>
+
+  <div class="layout">
+    <section class="panel" aria-labelledby="oneTitle">
+      <div class="panel-bar"><span id="oneTitle">Score one review</span></div>
+      <div class="pad">
+        <label for="text" class="mono muted">Review text</label>
+        <textarea id="text" rows="4">Great sound and really comfortable, but the left ear broke after a month.</textarea>
+        <div class="chips" id="examples"></div>
+        <div id="result" aria-live="polite" style="margin-top:.9rem"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="batchTitle">
+      <div class="panel-bar">
+        <span id="batchTitle">Analyze a batch</span>
+        <button type="button" class="btn small" id="useSample">Load 136-review sample</button>
+      </div>
+      <div class="pad">
+        <label for="batch" class="mono muted">One review per line</label>
+        <textarea id="batch" rows="4" placeholder="Paste reviews here, one per line"></textarea>
+        <div style="margin-top:.5rem"><button type="button" class="btn small primary" id="runBatch">Build report</button></div>
+        <div id="report" style="margin-top:.9rem"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="notes">
+    <h2>About this demo</h2>
+    <div class="notes-grid">
+      <div>
+        <h3 class="mono">How it works</h3>
+        <ul>
+          <li>Text gets cleaned and turned into TF-IDF features over single words and word pairs.</li>
+          <li>A class-balanced logistic regression scores those features. Each bar is a word’s TF-IDF weight times its coefficient.</li>
+          <li>Anything under 60% confidence is labeled uncertain, same as the Python report.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">How I checked the port</h3>
+        <ul>
+          <li>The JavaScript scores match scikit-learn to within 0.0000003 across 144 test strings.</li>
+          <li id="metricLine"></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="mono">Known limits</h3>
+        <ul>
+          <li>It only learned from 136 labeled reviews, so the vocabulary is small and wording it hasn’t seen stays close to neutral.</li>
+          <li>The English stop-word list removes “not”, so “not good” mostly reads as “good”. That’s the first thing I’d fix.</li>
+          <li>The suspicious-review flags are simple rules, not real fraud detection.</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem"><a class="btn small" href="https://github.com/justinoh9/machine-learning-review-analyzer" target="_blank" rel="noreferrer">Python source and tests &#8599;</a></p>
+  </section>
+
+  <script src="model.js?v=1"></script>
+  <script>
+  (async () => {
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+    const UNCERTAIN_BAND = 0.60;
+    let data, sample, model;
+    try {
+      [data, sample] = await Promise.all(["model.json", "sample.json"].map((f) => fetch(f).then((r) => r.json())));
+      model = ReviewModel.create(data);
+    } catch (e) {
+      $("result").textContent = "The model couldn’t load. Please refresh.";
+      return;
+    }
+    const m = data.metrics;
+    $("metricLine").textContent = `Numbers from the Python project: ${(m.test_accuracy * 100).toFixed(1)}% on a ${m.n_test}-review held-out split, and ${(m.cv_mean * 100).toFixed(1)}% ± ${(m.cv_std * 100).toFixed(1)}% cross-validated.`;
+
+    const label = (p) => { const conf = Math.max(p, 1 - p); return conf < UNCERTAIN_BAND ? "uncertain" : p >= 0.5 ? "positive" : "negative"; };
+
+    // Same heuristics as insights.flag_suspicious, minus the rating and duplicate checks.
+    function flags(text) {
+      const out = [];
+      const toks = text.toLowerCase().match(/[a-z']+/g) || [];
+      if (toks.length > 0 && toks.length <= 4) out.push("very short");
+      const letters = text.replace(/[^a-zA-Z]/g, "");
+      if (letters.length > 12 && letters.replace(/[^A-Z]/g, "").length / letters.length > 0.6) out.push("mostly caps");
+      if (toks.length >= 5 && new Set(toks).size / toks.length < 0.45) out.push("repetitive wording");
+      return out;
+    }
+
+    function renderOne() {
+      const text = $("text").value;
+      if (!text.trim()) { $("result").innerHTML = '<p class="muted">Type a review to score it.</p>'; return; }
+      const s = model.score(text);
+      const l = label(s.positive);
+      const max = Math.max(0.01, ...s.contributions.map((c) => Math.abs(c.contribution)));
+      const bars = s.contributions.slice(0, 8).map((c) => `
+        <div class="bar-row">
+          <span>${esc(c.term)}</span>
+          <span class="bar-track"><i style="width:${(Math.abs(c.contribution) / max) * 100}%;background:${c.contribution >= 0 ? "var(--good)" : "var(--bad)"}"></i></span>
+          <span class="bar-num">${c.contribution >= 0 ? "+" : ""}${c.contribution.toFixed(2)}</span>
+        </div>`).join("");
+      const f = flags(text);
+      $("result").innerHTML = `
+        <div class="verdict ${l}"><strong>${l}</strong><span class="prob">${(s.positive * 100).toFixed(1)}% chance positive</span></div>
+        <div class="gauge" role="img" aria-label="Probability positive ${(s.positive * 100).toFixed(0)} percent"><i style="left:${s.positive * 100}%"></i></div>
+        <div class="gauge-scale"><span>negative</span><span>uncertain</span><span>positive</span></div>
+        <h2 class="lbl">What drove it</h2>
+        ${bars || '<p class="muted">None of these words are in the model’s vocabulary, so this is just its neutral starting point.</p>'}
+        ${f.length ? `<h2 class="lbl">Flags</h2>${f.map((x) => `<span class="flag">${esc(x)}</span>`).join("")}` : ""}`;
+    }
+
+    const examples = [
+      ["Glowing", "Absolutely wonderful product, reliable and comfortable. Excellent design."],
+      ["Angry", "Terrible quality. It broke immediately and I returned this useless thing."],
+      ["Mixed", "Great sound and really comfortable, but the left ear broke after a month."],
+      ["Negation trap", "This is not good and not reliable."],
+      ["Suspicious", "BEST PRODUCT EVER BUY NOW!!!"]
+    ];
+    $("examples").innerHTML = examples.map((e, i) => `<button type="button" class="btn small" data-i="${i}">${esc(e[0])}</button>`).join("");
+    $("examples").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-i]");
+      if (b) { $("text").value = examples[Number(b.dataset.i)][1]; renderOne(); }
+    });
+    $("text").addEventListener("input", renderOne);
+    renderOne();
+
+    const verdictFor = (h) => h >= 75 ? "Excellent" : h >= 60 ? "Good" : h >= 45 ? "Mixed" : h >= 30 ? "Poor" : "Very poor";
+
+    function renderReport(texts) {
+      if (!texts.length) { $("report").innerHTML = '<p class="muted">Add at least one review.</p>'; return; }
+      const rows = texts.map((text) => { const s = model.score(text); return { text, p: s.positive, l: label(s.positive), flags: flags(text) }; });
+      const n = rows.length;
+      const count = (x) => rows.filter((r) => r.l === x).length;
+      const pct = (x) => (count(x) / n) * 100;
+      const health = Math.round((rows.reduce((a, r) => a + r.p, 0) / n) * 100);
+      const flagged = rows.filter((r) => r.flags.length).length;
+      const themes = (lab) => {
+        const tally = new Map();
+        rows.filter((r) => r.l === lab).forEach((r) => {
+          model.score(r.text).contributions
+            .filter((c) => (lab === "positive" ? c.contribution > 0 : c.contribution < 0) && !c.term.includes(" "))
+            .forEach((c) => tally.set(c.term, (tally.get(c.term) || 0) + 1));
+        });
+        return [...tally].sort((a, b) => b[1] - a[1]).slice(0, 6);
+      };
+      const list = (items) => items.map(([t, c]) => `<li><span>${esc(t)}</span><span class="muted">${c}</span></li>`).join("") || '<li class="muted">none</li>';
+      const seg = (x, bg, fg) => pct(x) ? `<i style="width:${pct(x)}%;background:${bg};color:${fg}">${pct(x) >= 10 ? `${pct(x).toFixed(0)}%` : ""}</i>` : "";
+      $("report").innerHTML = `
+        <div class="stats">
+          <div class="stat"><b>${health}</b><span>Health, ${verdictFor(health)}</span></div>
+          <div class="stat"><b>${n}</b><span>Reviews</span></div>
+          <div class="stat"><b>${flagged}</b><span>Flagged</span></div>
+        </div>
+        <div class="split" role="img" aria-label="${count("positive")} positive, ${count("uncertain")} uncertain, ${count("negative")} negative">
+          ${seg("positive", "#137a4b", "#fff")}${seg("uncertain", "#c9c5ba", "#14161a")}${seg("negative", "#b3261e", "#fff")}
+        </div>
+        <div class="terms">
+          <div><h2 class="lbl">Positive themes</h2><ul class="term-list">${list(themes("positive"))}</ul></div>
+          <div><h2 class="lbl">Negative themes</h2><ul class="term-list">${list(themes("negative"))}</ul></div>
+        </div>`;
+    }
+    $("useSample").addEventListener("click", () => {
+      $("batch").value = sample.map((r) => r.text).join("\n");
+      renderReport(sample.map((r) => r.text));
+    });
+    $("runBatch").addEventListener("click", () => renderReport($("batch").value.split("\n").map((s) => s.trim()).filter(Boolean)));
+    $("useSample").click();
+  })();
+  </script>
+</body>
+</html>
